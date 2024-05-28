@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="icon/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="icon/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="icon/favicon-16x16.png">
+  <link rel="manifest" href="icon/site.webmanifest">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
+  <link rel="stylesheet" href="./index.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700&display=swap">
+
+  <title>Simplex 2 fases </title>
+</head>
+
+<body>
+  <nav class="navbar" role="navigation" aria-label="main navigation">
+    <div class="navbar-brand">
+     
+      <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false" data-target="navbarBasic">
+        <span aria-hidden="true"></span>
+        <span aria-hidden="true"></span>
+        <span aria-hidden="true"></span>
+      </a>
+    </div>
+    <div id="navbarBasic" class="navbar-menu">
+      <div class="navbar-start">
+        <a class="navbar-item has-background-grey-lighter" href="./index.html">
+          Home
+        </a>
+      </div>
+    </div>
+  </nav>
+  <div class="section">
+    <div class="container">
+      <div class="block">
+        <p class="title is-size-9 is-uppercase has-text-weight-bold has-text-centered is-family-Poppins has-text-black">Calculadora dos Fases Simplex </p>
+        <p class="subtitle">Paso a paso !</p>
+      </div>
+      <div class="block columns">
+        <div class="column is-three-fifths-desktop">
+          <div class="block">
+            <textarea id="problem" class="textarea is-focused is-info" rows="10"></textarea>
+          </div>
+          <div class="level is-mobile">
+            <div class="level-item">
+              <button id="solve" class="button is-dark">Calcular</button>
+            </div>
+            <div class="level-item">
+              <button id="reset" class="button is-small" disabled>Reiniciar</button>
+            </div>
+            <div class="level-item">
+              <button id="history" class="button is-small js-modal-trigger" data-target="history-modal">Historial</button>
+            </div>
+          </div>
+          <div class="block" id="empty-msg"></div>
+        </div>
+        <div class="card column" classs="has-text-justified">
+          <header class="card-header">
+            <p class="card-header-title has-background-grey-lighter">
+              Ingrese la función objetivo en la caja de texto 
+            </p>
+          </header>
+          <div class="card-content is-size-7">
+            <div class="content">
+              <div class="level is-mobile">
+                <div class="level-left">
+                  <div class="level-item"><b>Utilize la siguiente sintaxis :</b></div>
+                </div>
+                <div class="level-right">
+                  <div class="level-item">
+                    <button class="button is-light is-small">
+                      <label class="checkbox"><input type="checkbox" id="toggle-guide">Mostrar detalles</label>
+                    </button>
+                  </div>
+                </div>
+              </div>
+              <div id="guide">
+                <p><b>Primera  parte: {min/max} = {Función Objetivo}</b></p>
+                <div class="level is-mobile">
+                  <div class="level-item">Ejemplo :</div>
+                  <div class="level-item"><textarea name="eg1" rows="1" readonly
+                      class="has-background-light">max = 3x1 + 2x2</textarea></div>
+                </div>
+                <ul class="details hide">
+                  <li>Especifique si es minimización o maximización usando las palabras claves "min" o "max"</li>
+                  <li>Escribe la expresión de la función objetivo.</li>
+                  <li>Mantén la expresión  en una sola línea y separa min/max y la expresión con el signo '='.</li>
+                </ul>
+                <p><b>Segunda parte : Restricciones</b></p>
+                <div class="level is-mobile">
+                  <div class="level-item">Ejemplo :</div>
+                  <div class="level-item"><textarea name="eg2" rows="3" readonly
+                      class="has-background-light"></textarea></div>
+                </div>
+                <ul class="details hide">
+                  <li>Escribe cada restricción en una línea separada</li>
+                  <li>No es necesario escribir restricciones de no-negatividad</li>
+                  <li>No es necesario escribir "sujeto a" u frases similares</li>
+                  <li><b>No usar los siguientes nombres de variables: <i>slck, srpls, artfcl</i> 
+                    ya que se utilizan en el algoritmo para variables de holgura, excedentes y artificiales respectivamente</b></li>
+                </ul>
+                <p class="has-text-weight-bold">El cuadro de texto de entrada ya contiene un ejemplo</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="section">
+    <div class="container">
+      <div id="output"></div>
+    </div>
+  </div>
+  <div class="modal is-size-6" id="history-modal">
+    <div class="modal-background"></div>
+    <div class="modal-card">
+      <header class="modal-card-head">
+        <p class="modal-card-title">Input history</p>
+        <button class="delete" aria-label="close"></button>
+      </header>
+      <section class="modal-card-body">
+        <p>No history, start using to save history.</p>
+      </section>
+      <footer class="modal-card-foot">
+        <button class="button">Cancelar</button>
+      </footer>
+    </div>
+  </div>
+  <script src="./calculate.js"></script>
+  <script src="./dom.js"></script>
+</body>
+
+</html>
