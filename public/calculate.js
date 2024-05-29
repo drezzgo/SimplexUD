@@ -47,7 +47,7 @@ const findTerms = (row) => {
     });
     
     // Devuelve el array de términos procesados
-    alert(rowTerm);
+    //alert(rowTerm);
     return rowTerm;
 
 }
@@ -210,6 +210,7 @@ const addSlackSurplusArtificial = (signs) => {
     })
 }
 
+// Convierte la función objetivo y las restricciones dadas en su forma estándar.
 const standardForm = (iobj, irows) => {
     const { target, objvalue } = parseObj(iobj)
     let { rVector, coeffDict, signs } = parseConstraint(irows)
@@ -221,12 +222,14 @@ const standardForm = (iobj, irows) => {
     printSubtitle('Convertiendo a su forma estandar ')
     printTableCardStandardForm('Matriz de coeficientes de entrada :')
     $.basicKount = $.variables.length
-    printVariables('Basic')
+    // Imprime la lista de variables básicas.
+    printVariables('Variables')
     addSlackSurplusArtificial(signs)
     $.nonBasicKount = $.variables.length - $.basicKount
     $.artificialKount = $.variables.length - ($.basicKount + $.nonBasicKount)
     printTableCardStandardForm('Matriz de coeficientes después de sumar variables de holgura, excedentes y artificiales:')
-    printVariables('Non-basic')
+    // Imprime la lista de variables no básicas.
+    printVariables('Variables no ')
     return { target, rVector }
 }
 
@@ -372,14 +375,14 @@ const simplex = (phase) => {
     $.leavingIndex = findLeavingVar($.minmaxRCostIndex)
     printRatio(card)
     if ($.leavingIndex === -1) {
-        const msg = 'All minimum ratios are negative or infinity, hence solution is unbounded.'
+        const msg = 'Todas las proporciones mínimas son negativas o infinitas, por lo que la solucion es indefinida.'
         printWarning(msg, card)
         return false
     }
     printEnteringLeavingVar(card)
     const historyNotRepeat = checkHistory()
     if (!historyNotRepeat) {
-        const msg = 'Degeneracy exists, stopping.'
+        const msg = 'La fase 1 ha concluido. Procediendo a la fase 2 o evaluando la solución actual.'
         printWarning(msg, card)
         return false
     }
@@ -407,7 +410,7 @@ const removeArtificial = () => {
     $.matrixA = $.matrixA.map(row => {
         return row.filter((q, i) => !artificialIndex.includes(i))
     })
-    printWarning('Todas las variables artificiales se eliminan de la base.', output)
+    printWarning('Todas las variables artificiales se eliminan de la base (Ri).', output)
 }
 
 const phase1 = () => {
@@ -467,6 +470,6 @@ const getProblem = () => {
         startSimplex()
         calculationEnd()
     } else {
-        printWarning('empty input', emptyMsg)
+        printWarning('No ha ingresado valores', emptyMsg)
     }
 }

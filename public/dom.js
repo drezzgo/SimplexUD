@@ -114,7 +114,7 @@ const selectHistory = (i, value) => {
 const clearHistory = () => {
     localStorage.removeItem(lclStorageKey)
     clearOutput(historyBody)
-    const p = createNode('p', [], 'No history, start using to save history.')
+    const p = createNode('p', [], 'Sin historial, comience a usarlo para guardar el historial.')
     historyBody.appendChild(p)
 }
 
@@ -126,7 +126,7 @@ const loadHistory = () => {
 
     const delAllDiv = createNode('div', ['block', 'level'])
 
-    const btn = createNode('button', ['level-right', 'button', 'is-danger'], 'Clear History')
+    const btn = createNode('button', ['level-right', 'button', 'is-danger'], 'Eliminar Historial')
     btn.addEventListener('click', clearHistory)
     delAllDiv.appendChild(btn)
     historyBody.appendChild(delAllDiv)
@@ -144,9 +144,9 @@ const loadHistory = () => {
         div.appendChild(body)
 
         const footer = createNode('footer', ['card-footer'])
-        const select = createNode('a', ['card-footer-item'], 'Select')
+        const select = createNode('a', ['card-footer-item'], 'Seleccionar')
         select.addEventListener('click', () => { selectHistory(i, h.value) })
-        const del = createNode('a', ['card-footer-item', 'has-text-danger'], 'Delete')
+        const del = createNode('a', ['card-footer-item', 'has-text-danger'], 'Eliminar')
         del.addEventListener('click', () => { deleteHistory(i) })
 
         footer.appendChild(select)
@@ -259,9 +259,9 @@ const printTableCardStandardForm = (txt) => {
 }
 
 const printVariables = (q) => {
-    const vars = q === 'Basic' ? $.variables : $.variables.slice($.basicKount)
+    const vars = q === 'Variables' ? $.variables : $.variables.slice($.basicKount)
     const txt = vars.join(', ')
-    const div = createNode('div', ['block'], `${q} variables: ${txt}`)
+    const div = createNode('div', ['block'], `${q} Basicas: ${txt}`)
     output.appendChild(div)
 }
 
@@ -294,7 +294,7 @@ const printTableBFS = () => {
 const printBFS = () => {
     const div = createNode('div', ['message'])
     const header = createNode('div', ['message-header'])
-    const p = createNode('p', [], 'Current basic feasible solution (BFS)')
+    const p = createNode('p', [], 'Solución básica factible actual (SBF)')
     header.appendChild(p)
     div.appendChild(header)
 
@@ -359,11 +359,11 @@ const printHeaderNumRowCol = (arr, cls) => {
 
 const printTableHead = (phase) => {
     const thead = createNode('thead')
-    const cBasis = createNode('th', [], 'current\nbasis')
+    const cBasis = createNode('th', [], 'Base\nActual')
     cBasis.setAttribute('rowspan', 2)
-    const cBasicVars = createNode('th', [], 'basic\nvariable')
+    const cBasicVars = createNode('th', [], 'Variable\nBasica')
     cBasicVars.setAttribute('rowspan', 2)
-    const b = createNode('th', [], 'b')
+    const b = createNode('th', [], 'Xb')
     b.setAttribute('rowspan', 2)
 
     const p1CVRow = phase == 1 ? printHeaderNumRowCol($.p1CostVector) : printHeaderNumRowCol($.costVector)
@@ -438,14 +438,14 @@ const printTableCard = (phase) => {
 
 const printRatio = (card) => {
     const trHead = card.querySelector('thead tr')
-    const th = createNode('th', [], 'ratio')
+    const th = createNode('th', [], 'Proporciones')
     th.setAttribute('rowspan', 2)
     trHead.appendChild(th)
 
     const trBody = card.querySelectorAll('tbody tr')
     trBody.forEach((tr, i) => {
         const r = $.ratio[i]
-        const txt = isFinite(r) ? `${checkDecimals(r)}` : 'infinity'
+        const txt = isFinite(r) ? `${checkDecimals(r)}` : 'infinito'
         const th = createNode('th', ['has-background-white-ter'], txt)
         tr.appendChild(th)
     })
@@ -465,15 +465,15 @@ const printEnteringLeavingVar = (card) => {
     const thRCost = card.querySelectorAll('tfoot tr th')[$.minmaxRCostIndex + 1]
     thRCost.classList.add('has-background-grey-lighter')
 
-    const word = $.target === 'min' ? 'lowest' : 'highest'
-    const ev1 = `Entering variable: Among all the relative cost`
-    const ev2 = `${checkDecimals($.minmaxRCost)} is ${word}`
-    const ev3 = `So ${$.variables[$.minmaxRCostIndex]} is the entering variable`
+    const word = $.target === 'min' ? 'el mas bajo' : 'highest'
+    const ev1 = `Variable entrante: Entre todos los costos relativos`
+    const ev2 = `${checkDecimals($.minmaxRCost)} es ${word}`
+    const ev3 = `Entonces ${$.variables[$.minmaxRCostIndex]} es la variable entrante`
     const ev = `${ev1}, ${ev2}. ${ev3}.`
 
-    const lv1 = `Leaving variable: Among all the ratios`
-    const lv2 = `${checkDecimals($.ratio[$.leavingIndex])} is lowest`
-    const lv3 = `So ${$.basicVars[$.leavingIndex]} is the leaving variable`
+    const lv1 = `Variable saliente: Entre todas las proporciones`
+    const lv2 = `${checkDecimals($.ratio[$.leavingIndex])} es la más baja`
+    const lv3 = `Entonces ${$.basicVars[$.leavingIndex]} es la variable saliente`
     const lv = `${lv1}, ${lv2}. ${lv3}.`
 
     const block = printEnteringLeavingTxt(ev, lv)
@@ -482,7 +482,7 @@ const printEnteringLeavingVar = (card) => {
 
 const printAnswer = () => {
     const title = createNode('div', ['notification', 'has-background-primary', 'has-text-white'])
-    const p = createNode('p', ['subtitle'], 'Final solution')
+    const p = createNode('p', ['subtitle'], 'Solución Final')
     title.appendChild(p)
     output.appendChild(title)
 
@@ -496,7 +496,7 @@ const printAnswer = () => {
     soln.appendChild(z)
     body.appendChild(soln)
 
-    const iter = createNode('div', ['block'], `Iterations taken: ${$.kount}`)
+    const iter = createNode('div', ['block'], `Iteraciones realizadas: ${$.kount}`)
     body.appendChild(iter)
     div.appendChild(body)
     output.appendChild(div)
