@@ -1,9 +1,8 @@
-document.getElementById("lista").addEventListener("change", function(){
-    const additional = document.getElementById("informacionAdicional");
+document.getElementById('lista').addEventListener('change', function(){
+    const informacionAdicional = document.getElementById('informacionAdicional');
     if (this.checked){
-        additionalInfo.classList.remove("hidden");    
+        informacionAdicional.classList.remove("hidden");    
     } else {
-        additionalInfo.classList.add("hidden");
+        informacionAdicional.classList.add("hidden");
     }
-    })
-;
+});
