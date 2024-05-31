@@ -3,6 +3,7 @@ const defaultInput = 'min = 150x1 + 230x2 + 260x3 \nx1 + x2 + x3 <= 500\n2.5x1 +
 //Para acceder a cada elemento que tiene un id en index.html 
 const problem = document.getElementById('problem')
 const solve = document.getElementById('solve')
+const metodo = document.getElementById('method-select')
 const output = document.getElementById('output')
 const btnReset = document.getElementById('reset')
 const emptyMsg = document.getElementById('empty-msg')
@@ -156,15 +157,8 @@ const loadHistory = () => {
     })
 }
 
-const eg2 = document.querySelector('textarea[name="eg2"]')
-eg2.value = '2x1 + x2 <= 18\n2x1 + 3x3 <= 42\n3x1 + x2 >= 24'
 
 const guideDetails = document.querySelectorAll('#guide .details')
-
-const btnGuide = document.getElementById('toggle-guide')
-btnGuide.addEventListener('click', () => {
-    guideDetails.forEach(g => g.classList.toggle('hide'))
-})
 
 solve.addEventListener('click', getProblem)
 
@@ -501,3 +495,12 @@ const printAnswer = () => {
     div.appendChild(body)
     output.appendChild(div)
 }
+
+document.getElementById('lista').addEventListener('change', function(){
+    const informacionAdicional = document.getElementById('informacionAdicional');
+    if (this.checked){
+        informacionAdicional.classList.remove("hidden");    
+    } else {
+        informacionAdicional.classList.add("hidden");
+    }
+});

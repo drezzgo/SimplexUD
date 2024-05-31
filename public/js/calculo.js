@@ -227,7 +227,6 @@ const addSlackSurplusArtificial = (signs) => {
     });
 }
 
-<<<<<<< HEAD
 // Función para convertir la función objetivo y las restricciones dadas en su forma estándar
 const standardForm = (iobj, irows) => {
     // Analiza la función objetivo y las restricciones para obtener datos útiles
@@ -258,26 +257,6 @@ const standardForm = (iobj, irows) => {
     printVariables('Variables no ');
     // Devuelve el objetivo y el vector de recursos
     return { target, rVector };
-=======
-const standardForm = (iobj, irows) => {
-    const { target, objvalue } = parseObj(iobj)
-    let { rVector, coeffDict, signs } = parseConstraint(irows)
-    getCostVector(objvalue)
-    const bNegativeIndex = findBNegative(rVector)
-    removeBNegative(bNegativeIndex, coeffDict, rVector)
-    assignZeroCoeff(coeffDict)
-    $.matrixA = formMatrixA(coeffDict)
-    printSubtitle('Convertiendo a su forma estandar ')
-    printTableCardStandardForm('Matriz de coeficientes de entrada :')
-    $.basicKount = $.variables.length
-    printVariables('Basic')
-    addSlackSurplusArtificial(signs)
-    $.nonBasicKount = $.variables.length - $.basicKount
-    $.artificialKount = $.variables.length - ($.basicKount + $.nonBasicKount)
-    printTableCardStandardForm('Matriz de coeficientes después de sumar variables de holgura, excedentes y artificiales:')
-    printVariables('Non-basic')
-    return { target, rVector }
->>>>>>> parent of 969e228 (Traduccion de todos los textos, botones,labels y alertas)
 }
 
 // Otras funciones auxiliares necesarias para el método del simplex
@@ -504,30 +483,18 @@ const simplex = (phase) => {
     printRatio(card);
     // Si no se puede encontrar una variable que salga, la solución es indefinida
     if ($.leavingIndex === -1) {
-<<<<<<< HEAD
         const msg = 'Todas las proporciones mínimas son negativas o infinitas, por lo que la solución es indefinida.';
         printWarning(msg, card);
         return false;
-=======
-        const msg = 'All minimum ratios are negative or infinity, hence solution is unbounded.'
-        printWarning(msg, card)
-        return false
->>>>>>> parent of 969e228 (Traduccion de todos los textos, botones,labels y alertas)
     }
     // Imprime las variables que entran y salen de la base
     printEnteringLeavingVar(card);
     // Verifica si la combinación actual ya ha sido procesada
     const historyNotRepeat = checkHistory();
     if (!historyNotRepeat) {
-<<<<<<< HEAD
         const msg = 'La fase 1 ha concluido. Procediendo a la fase 2 o evaluando la solución actual.';
         printWarning(msg, card);
         return false;
-=======
-        const msg = 'Degeneracy exists, stopping.'
-        printWarning(msg, card)
-        return false
->>>>>>> parent of 969e228 (Traduccion de todos los textos, botones,labels y alertas)
     }
     // Realiza la operación de fila para actualizar la tabla simplex
     rowOperation($.leavingIndex, $.minmaxRCostIndex);
@@ -562,17 +529,11 @@ const removeArtificial = () => {
 
     // Elimina las columnas correspondientes de matrixA que están en artificialIndex
     $.matrixA = $.matrixA.map(row => {
-<<<<<<< HEAD
         return row.filter((q, i) => !artificialIndex.includes(i));
     });
 
     // Imprime una advertencia indicando que todas las variables artificiales han sido eliminadas
     printWarning('Todas las variables artificiales se eliminan de la base (Ri).', output);
-=======
-        return row.filter((q, i) => !artificialIndex.includes(i))
-    })
-    printWarning('Todas las variables artificiales se eliminan de la base.', output)
->>>>>>> parent of 969e228 (Traduccion de todos los textos, botones,labels y alertas)
 }
 
 // Fase 1 del algoritmo simplex: eliminar variables artificiales
@@ -629,11 +590,13 @@ const startSimplex = () => {
 
 // Procesa el problema ingresado por el usuario
 const getProblem = () => {
-    const input = problem.value.trim(); // Obtiene y recorta el valor del problema ingresado
-
-    if (input !== '') { // Si se ingresó un problema
+    const selectedMethod = metodo.value;
+    console.log(selectedMethod);
+    const input = problem.value.trim(); // Obtiene y limpia los espacios en blanco a los extremos de las lineas
+    if (input !== '') {
         calculationStart(); // Inicia el cálculo
-        const lines = input.split('\n'); // Divide el input en líneas
+        const lines = input.split('\n'); // Crea un array con cada linea del problema, (funcion objetivo, restriccion1, restricion..., restriccionN)
+
         lines.forEach((line, i) => {
             if (i === 0) {
                 $.iobj = line.trim(); // La primera línea es la función objetivo
@@ -641,18 +604,19 @@ const getProblem = () => {
                 $.irows.push(line.trim()); // Las líneas siguientes son las restricciones
             }
         });
+        
+        if(selectedMethod === "grafico"){
+            alert("Seleccion");
+        } else {
+            const standardFormOutput = standardForm($.iobj, $.irows); // Convierte el problema a forma estándar
+            console.log(standardFormOutput);
+            $.target = standardFormOutput.target; // Establece el objetivo (minimizar o maximizar)
+            $.rVector = standardFormOutput.rVector; // Establece el vector de términos independientes
 
-        const standardFormOutput = standardForm($.iobj, $.irows); // Convierte el problema a forma estándar
-        $.target = standardFormOutput.target; // Establece el objetivo (minimizar o maximizar)
-        $.rVector = standardFormOutput.rVector; // Establece el vector de términos independientes
-
-        startSimplex(); // Inicia el algoritmo simplex
-        calculationEnd(); // Finaliza el cálculo
+            startSimplex(); // Inicia el algoritmo simplex
+            calculationEnd(); // Finaliza el cálculo
+        }
     } else {
-<<<<<<< HEAD
         printWarning('No ha ingresado valores', emptyMsg); // Imprime una advertencia si no se ingresaron valores
-=======
-        printWarning('empty input', emptyMsg)
->>>>>>> parent of 969e228 (Traduccion de todos los textos, botones,labels y alertas)
     }
 }
