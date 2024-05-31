@@ -12,19 +12,26 @@
     <link rel="icon" type="image/png" href="public/icon/icon.png">
 </head>
 <body class="container mx-auto mt-auto mt-5 text-center">
-    <header class="relative isolate py-24 px-6 sm:py-32">
+    <header class="relative isolate py-16 px-6 sm:py-24">
             <div class="mx-auto max-w-7xl lg:px-0">
                 <div class="mx-auto max-w-2xl lg-mx-0 text-left font-sans">
                     <p class="font-semibold text-xl sm:text-2xl text-gray-500">Programacion lineal</>
-                    <h1 class="font-bold text-4xl sm:text-6xl tracking-tight text-red-500 ">Simplex <span class="text-amber-400">U</span>D</h1>
+                    <h1 class="font-bold text-6xl sm:text-6xl tracking-tight text-red-500 ">Simplex <span class="text-amber-400">U</span>D</h1>
                     <p class="mt-6 text-lg leading-8 text-gray-500">Soluciona tus problemas de programacion lineal sease mediante el metodo simplex, dos fases o grafico.</p>
                 </div>
             </div>
     </header>
     <main>
-        <section id="inicio" class="px-6 grid grid-cols-2 gap-4 font-sans">
-            <div class="bg-gray-300">a</div>
-            <div class="text-gray-500 shadow-md">
+        <section id="inicio" class="px-6 grid grid-cols-1 grid-rows-0 sm:grid-rows-2 sm:grid-cols-2 gap-4 font-sans">
+            <div id="textarea" class="text-gray-500 shadow-md rounded-l-lg h-auto">
+                <textarea id="problema" class="w-11/12 h-48 m-4 border border-gray-400 rounded-lg "></textarea>
+                <div class="flex mx-4 justify-center space-x-4">
+                    <button id="resolver" class="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">Resolver</button>
+                    <button id="limpiar" class="bg-gray-100 hover:bg-gray-200 text-red-500 font-semibold py-2 px-4 rounded focus:outline-none focus:shadow-outline">Limpiar</button>
+                    <button id="historial" class="bg-gray-100 hover:bg-gray-200 text-red-500 font-semibold py-2 px-4 rounded focus:outline-none focus:shadow-outline">Historial</button>
+                </div>
+            </div>
+            <div id="manual" class="row-span-2 text-gray-500 shadow-md rounded-r-lg">
                 <div class="text-left m-4">
                     <h2 class="font-bold text-xl text-red-500">¿Como usarlo? ¡Facil!</h2>
                     <p>Debes cumplir una sintaxis estandar para que podamos resolver tu problema...<br> ¡sin problemas!<br><br>
@@ -47,7 +54,7 @@
                     </p>
                 </div>
                 <div id="informacionAdicional" class="hidden text-left mx-4">
-                    <ul class="list-disc list-inside ml-4">
+                    <ul class="list-disc list-inside m-4">
                         <li>El coeficiente debe ser un número real.</li>
                         <li>Las variables deben ser identificadas con x1, x2, x3, etc.</li>
                         <li>Los operadores permitidos son <=, >= y =.</li>
@@ -56,6 +63,10 @@
             </div>
         </section>
     </main>
+    <footer class="relative isolate py-24 px-6 sm:py-24">
+
+    </footer>
 </body>
 <script src="https://cdn.tailwindcss.com"></script>
+<script src="public/js/main.js"></script>
 </html>
