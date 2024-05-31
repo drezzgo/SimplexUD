@@ -7,12 +7,46 @@
     <meta name="keywords" content="Simplex, SimplexUD, Metodo Simplex, Simplex Mehod, Codigo, JavaScript">
     <meta name="description" content="Repositorio de una pagina web que resuelve problemas de programacion lineal
     con metodo simplex y grafico">
-    <meta http-equiv = "Content-Type" content = "text/html; charset = UTF-8" />>
+    <meta http-equiv = "Content-Type" content = "text/html; charset = UTF-8" />
     <base href="index.html">
     <link rel="icon" type="image/png" href="public/icon/icon.png">
 </head>
-<body>
-
+<body class="container mx-auto mt-auto mt-5 text-center">
+    <header class="relative isolate py-24 px-6 sm:py-32">
+            <div class="mx-auto max-w-7xl lg:px-0">
+                <div class="mx-auto max-w-2xl lg-mx-0 text-left font-sans">
+                    <p class="font-semibold text-xl sm:text-2xl text-gray-500">Programacion lineal</>
+                    <h1 class="font-bold text-4xl sm:text-6xl tracking-tight text-red-500 ">Simplex <span class="text-amber-400">U</span>D</h1>
+                    <p class="mt-6 text-lg leading-8 text-gray-500">Soluciona tus problemas de programacion lineal sease mediante el metodo simplex, dos fases o grafico.</p>
+                </div>
+            </div>
+    </header>
+    <main>
+        <section id="inicio" class="px-6 grid grid-cols-2 gap-4 font-sans">
+            <div class="bg-gray-300">a</div>
+            <div class="text-gray-500 shadow-md">
+                <div class="text-left m-4">
+                    <h2 class="font-bold text-xl text-red-500">¿Como usarlo? ¡Facil!</h2>
+                    <p>Debes cumplir una sintaxis estandar para que podamos resolver tu problema...<br> ¡sin problemas!<br><br>
+                        <span class="text-red-500 font-bold">Paso 1</span><br>
+                        Para empezar, empieza por definir la <span class="text-red-400 font-semibold">funcion objetivo</span> (Min/Max)<br><br>
+                        Por ejemplo : <span class=" font-semibold">max: 3x1 + 2x2</span><br><br>
+                        <span class="text-red-500 font-bold">Paso 2</span><br>
+                        Acontinuacion, escribe las <span class="text-red-400 font-semibold">restricciones</span> a las que se sujeta el problema, ¡diferencialas con un salto de linea!<br><br>
+                        Por ejemplo :
+                    </p>
+                    <ul class="list-none list-inside ml-4 font-semibold">
+                        <li>2x1 + x2 <= 18</li>
+                        <li>2x1 + 3x3 <= 42</li>
+                        <li>3x1 + x2 >= 24</li>
+                    </ul>
+                    <br>
+                    <p>De igual manera no te preocupes, nosotros hemos puesto este ejemplo para ti en el cuadro de texto
+                    </p>
+                </div>
+            </div>
+        </section>
+    </main>
 </body>
 <script src="https://cdn.tailwindcss.com"></script>
 </html>
