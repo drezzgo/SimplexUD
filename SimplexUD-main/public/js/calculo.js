@@ -126,6 +126,11 @@ const parseConstraint = (irows) => {
             signs.push('ge'); // Si es >=, agrega 'ge' al array de tipos de restricciones
             return ge;
         }
+        const eq = row.split('=='); // Check for equality first
+        if (eq.length === 2) {
+          signs.push('eq'); // New sign for equality
+          return eq;
+        }
         signs.push('e'); // Si es =, agrega 'e' al array de tipos de restricciones
         return row.split('=');
     });
@@ -224,6 +229,11 @@ const addSlackSurplusArtificial = (signs) => {
             $.pivots.push(pivot);
             return;
         }
+        if (sign === 'eq') { // Add artificial variable for equality
+            const artificial = addVars('A', i); // Use 'A' for artificial variable
+            $.pivots.push(artificial);
+            return
+          }
     });
 }
 
@@ -262,7 +272,7 @@ const standardForm = (iobj, irows) => {
 // Otras funciones auxiliares necesarias para el método del simplex
 const getPhase1CostVector = () => {
     return $.variables.map(v => {
-        if (v.includes('R')) return 1; // Devuelve 1 si es una variable artificial (R), 0 en caso contrario
+        if (v.includes('R') || v.includes('A')) return 1; // Devuelve 1 si es una variable artificial (R), 0 en caso contrario
         return 0;
     });
 }
@@ -396,7 +406,7 @@ const updatePivot = (row, col) => {
  */
 const containsArtificial = () => 
     // Verifica si alguna de las variables básicas contiene 'R', indicando que es artificial
-    $.basicVars.some(b => b.includes('R'));
+    $.basicVars.some(b => b.includes('R')|| b.includes('A'));
 
 /**
  * Encuentra el costo reducido objetivo dependiendo del tipo de problema (minimización o maximización).
@@ -513,6 +523,7 @@ const removeArtificial = () => {
             artificialIndex.push(i); // Guarda su índice
             return false; // Elimínala del array de variables
         }
+      
         return true; // Mantén las variables no artificiales
     });
 
