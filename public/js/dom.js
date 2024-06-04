@@ -1,5 +1,8 @@
-const defaultInput2 = 'min = 150x1 + 230x2 + 260x3 \nx1 + x2 + x3 <= 500\n2.5x1 + x2 - x3 >= 200\n3x2 + x1 >= 240\nx1 - 20x3 <= 0\nx3 <= 6000'
-const defaultInput = 'max = 22x1 + 45x2 \n1x1 - 3x2 <= 42\n4x1 - 8x2 <= 40\n0.5x1 + 1x2 <= 15'
+const defaultInput = 'min = 150x1 + 230x2 + 260x3 \nx1 + x2 + x3 <= 500\n2.5x1 + x2 - x3 >= 200\n3x2 + x1 >= 240\nx1 - 20x3 <= 0\nx3 <= 6000'
+const defaultInput2 = 'max = 3000x1 + 2000x2 \n2x1 + 1x2 <= 100 \n1x1 + 1x2 <= 80 \n1x2 <= 40'
+const defaultInput3 = 'max = 22x1 + 45x2 \n1x1 - 3x2 <= 42\n4x1 - 8x2 <= 40\n0.5x1 + 1x2 <= 15'
+
+let loquesea = "150x1 + 230x2 + 260x3 + 60x4 + 48x5 + 69x6 + 11x7 + 9x8 + 2002x9 + 14x10 + 9x11 + 2012x12 + 54x13 + 54x14 + 54x15 + 54x16 + 54x17 + 15x18 + 54x19 + 15x20"
 //Para acceder a cada elemento que tiene un id en index.html 
 const problem = document.getElementById('problem')
 const solve = document.getElementById('solve')

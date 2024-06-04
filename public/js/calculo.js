@@ -595,8 +595,6 @@ const getProblem = () => {
 
     if(selectedMethod == "grafico"){ //----> GRAFICO
         const entrada = document.getElementById("problem");
-        console.log(typeof(entrada));
-        console.log(entrada);
         terminos(entrada);
     } else { //----> SIMPLEX
     

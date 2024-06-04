@@ -1,6 +1,7 @@
 let irestricciones =[]; 
 let CostoT=[];
 let Res_Sin_Signo=[];
+let TipoObjetivo;
 let vector_inecuacion=[];
 let CoefX1=[];
 let CoefX2=[];
@@ -12,50 +13,78 @@ let X1_FunObj;
 let X2_FunObj;
 let zValue=[];
 
+
+function vaciarArreglos(){
+    while(irestricciones.length > 0 || CostoT.length > 0 || Res_Sin_Signo.length > 0 || vector_inecuacion.length > 0 || CoefX1.length > 0 || CoefX2.length > 0 || terminosX1.length > 0 || terminosX2.length > 0  || zValue.length > 0)
+        irestricciones.pop();
+        CostoT.pop()
+        Res_Sin_Signo.pop()
+        vector_inecuacion.pop()
+        CoefX1.pop()
+        CoefX2.pop()
+        terminosX1.pop()
+        terminosX2.pop()
+        zValue.pop()
+    }
+
 function terminos(entrada){
+    vaciarArreglos();
     let restricciones = [];
     let equivalenciasRestricciones = [];
     let resultadoRestricciones = [];
-    
     //let entradaMax = 'max = 22x1 + 45x2 \n1x1 - 3x2 <= 42\n4x1 - 8x2 <= 40\n0.5x1 + 1x2 <= 15';
     //let entradaMin = 'min = 2000x1 + 2000x2 \n1x1 + 2x2 >= 80\n3x1 + 2x2 >= 160\n5x1 + 2x2 >= 200'
-    
     let partes = entrada.value.trim().split('\n');
     console.log(partes);
     
     for (let i = 0; i < partes.length; i++) {
+        if (i == 0 && partes[i].trim().includes("max")){
+            TipoObjetivo = "max";
+        } else if (i == 0 && partes[i].trim().includes("min")){
+            TipoObjetivo = "min";
+        }
+
         partes[i] = partes[i].trim().replace("max = ", "").replace("min = ", "").replace("- ", "-").replace(" + ", " ");
     
         partes[i] = partes[i].split(" ");
         console.log("Parte "+(i+1)+" : "+partes[i]+"\t|\t"+partes[i].length);    
+        console.log("EL programa va a: ", TipoObjetivo)
     
         let equivalencia;
         let resultado;
     
         if (i == 0 && partes[i].length == 2 && ( !(Math.sign(partes[i][0]) < 0 && Math.sign(partes[i][1]) < 0) ) ){ //Funcion objetivo
-            let coeficienteX1 = parseFloat(partes[i][0]);
-            let coeficienteX2 = parseFloat(partes[i][1]);
-            restricciones.push([coeficienteX1, coeficienteX2]);
-            TerminoX1FunObj = coeficienteX1;
-            TerminoX2FunObj = coeficienteX2;
+            restricciones.push([partes[i][0], partes[i][0]]);
+            X1_FunObj = parseFloat(partes[i][0]);
+            X2_FunObj = parseFloat(partes[i][1]);
     
-        }else if(i != 0 && partes[i].length == 3 && partes[i].includes("x1")){ //Restricciones solo con 1 termino
+        }else if(i != 0 && partes[i].length == 3 && partes[i][0].includes("x1")){ //Restricciones solo con 1 termino
             let coeficienteX1 = parseFloat(partes[i][0]);
             let equivalencia = partes[i][1];
             let resultado = parseFloat(partes[i][2]);
             restricciones.push([coeficienteX1]);
             equivalenciasRestricciones.push(equivalencia);
             resultadoRestricciones.push(resultado);
-            terminosX1.push(coeficienteX1)
+
+            //SANTI
+            CoefX1.push(coeficienteX1)
+            CoefX2.push(0);
+            vector_inecuacion.push(equivalencia)
+            CostoT.push(parseFloat(partes[i][2]));
     
-        } else if(i != 0 && partes[i].length == 3 && partes[i].includes("x2")){ //Restricciones solo con 1 termino
-            let coeficienteX1 = parseFloat(partes[i][0]);
+        } else if(i != 0 && partes[i].length == 3 && partes[i][0].includes("x2")){ //Restricciones solo con 1 termino
+            let coeficienteX2 = parseFloat(partes[i][0]);
             let equivalencia = partes[i][1];
             let resultado = parseFloat(partes[i][2]);
-            restricciones.push([coeficienteX1]);
+            restricciones.push([coeficienteX2]);
             equivalenciasRestricciones.push(equivalencia);
             resultadoRestricciones.push(resultado);
-            terminosX2.push(coeficienteX2);
+
+            //SANTI
+            CoefX1.push(0);
+            CoefX2.push(coeficienteX2);
+            vector_inecuacion.push(equivalencia)
+            CostoT.push(parseFloat(partes[i][2]));
     
         } else if (i != 0 && partes[i].length == 4) { //Restricciones solo con 2 terminos
             let coeficienteX1 = parseFloat(partes[i][0]);
@@ -65,18 +94,261 @@ function terminos(entrada){
             restricciones.push([coeficienteX1, coeficienteX2]);
             equivalenciasRestricciones.push(equivalencia);
             resultadoRestricciones.push(resultado);
-            terminosX1.push(coeficienteX1);
-            terminosX2.push(coeficienteX2);
+
+            //SANTI
+            CoefX1.push(coeficienteX1);
+            CoefX2.push(coeficienteX2);
+            vector_inecuacion.push(equivalencia)
+            CostoT.push(resultado);
     
         } else { //Si tienen menos de 1 termino o mas de 2, esta mal formulado
             console.log("Vos sos re estupido, mira bien las restriccion "+(i+1));
         }
     }
     
-    console.log("Restricciones: ", restricciones);
-    console.log("Equivalencias: ", equivalenciasRestricciones);
-    console.log("Resultados: ", resultadoRestricciones);
-    console.log("\n\nFuncion objetivo: ", TerminoX1FunObj, " ", TerminoX2FunObj);
-    console.log("Coeficienes X1: "+terminosX1+" | Coeficienes X2: "+terminosX2);    
+    // console.log("Restricciones: ", restricciones);
+    // console.log("Equivalencias: ", equivalenciasRestricciones);
+    // console.log("Resultados: ", resultadoRestricciones);
+    console.log("\n\nFuncion objetivo: ", X1_FunObj, typeof(X1_FunObj), " | ", X2_FunObj, typeof(X1_FunObj));
+    console.log("Coeficienes X1: "+CoefX1+" "+typeof(CoefX1)+" "+typeof(CoefX1[0])+" | Coeficienes X2: "+CoefX2+" "+typeof(CoefX2)+" "+typeof(CoefX2[0]));
+    console.log("Equivalencias: "+vector_inecuacion);
+    console.log("Resultados: "+CostoT);
+    console.log(typeof(CostoT[1]));
+    GraficarRestricciones();
 }
 
+function calcularIntersecciones() { //CHECK
+    let puntos = [];
+    for (let i = 0; i < CoefX1.length; i++) {
+        for (let j = i + 1; j < CoefX1.length; j++) {
+            const a1 = CoefX1[i], b1 = CoefX2[i], c1 = CostoT[i];
+            const a2 = CoefX1[j], b2 = CoefX2[j], c2 = CostoT[j];
+            const det = a1 * b2 - a2 * b1;;
+            if (det !== 0) {
+                const x = (c1 * b2 - c2 * b1) / det;
+                const y = (a1 * c2 - a2 * c1) / det;
+
+                if (x >= 0 && y >= 0) {
+                    const z = (X1_FunObj * x )+(X2_FunObj * y);
+                    puntos.push([x, y, z, `Intersección R${i + 1} y R${j + 1}`]);
+                }
+            }
+        }
+    }
+
+    for (let i = 0; i < CoefX1.length; i++) {
+        if (CoefX1[i] !== 0) {
+            const x = CostoT[i] / CoefX1[i];
+            if (x >= 0) {
+                const z = X1_FunObj * x;
+                puntos.push([x, 0, z, `Intersección R${i + 1} y eje X`]);
+      
+            }
+        }
+
+        if (CoefX2[i] !== 0) {
+            const y = CostoT[i] / CoefX2[i];
+            if (y >= 0) {
+                const z = X2_FunObj * y;
+                puntos.push([0, y, z, `Intersección R${i + 1} y eje Y`]);
+
+            }
+        }
+    }
+
+    return puntos;
+}
+function esFactible(x, y) { //CHECK
+
+   // if(tipoOptimizacion=="max"){
+        for (let i = 0; i < CoefX1.length; i++) {
+            if (CoefX1[i] * x + CoefX2[i] * y > CostoT[i]) {
+                return false;
+            }
+        }
+        return true;
+    /*}else if(tipoOptimizacion=="min"){
+
+        for (let i = 0; i < CoefX1.length; i++) {
+            if (CoefX1[i] * x + CoefX2[i] * y < CostoT[i]) {
+                return false;
+            }
+        }
+
+    }*/
+    
+}
+function obtenerPuntosFactibles() { //CHECK
+
+    const puntosInterseccion = calcularIntersecciones();
+    return puntosInterseccion.filter(punto => esFactible(punto[0], punto[1]));
+}
+function encontrarZOptima(puntosFactibles) { //CHECK
+
+    let zOptima = -Infinity;
+    let puntoOptimo = null;
+  //  if(tipoOptimizacion=="max"){
+
+    puntosFactibles.forEach(punto => {
+        if (punto[2] > zOptima) {
+            zOptima = punto[2];
+            puntoOptimo = punto;
+        }
+    });
+/* }else if(tipoOptimizacion=="min"){
+        puntosFactibles.forEach(punto => {
+            if (punto[2] <zOptima) {
+                zOptima = punto[2];
+                puntoOptimo = punto;
+            }
+        });
+    }*/
+
+    return { zOptima, puntoOptimo };
+}
+
+function GraficarRestricciones() {
+    let traces = [];
+    let puntosInterseccion = calcularIntersecciones();
+    let puntosFactibles = obtenerPuntosFactibles();
+    let { zOptima, puntoOptimo } = encontrarZOptima(puntosFactibles);
+
+    CoefX1.forEach((coefX1, index) => {
+        const coefX2 = CoefX2[index];
+        const costo = CostoT[index];
+
+        let xValues = [];
+        let yValues = [];
+
+        if (coefX1 !== 0) {
+            xValues.push(costo / coefX1, 0);
+            yValues.push(0, costo / coefX2);
+        } else {
+            xValues.push(0, 10); // Arbitrary large value for better visualization
+            yValues.push(costo / coefX2, costo / coefX2);
+        }
+
+        let trace = {
+            x: xValues,
+            y: yValues,
+            mode: 'lines+markers',
+            name: `Restricción ${index + 1}`,
+            line: {
+                color: `hsl(${index * 60}, 100%, 50%)`
+            }
+        };
+
+        traces.push(trace);
+    });
+
+    // Colores para los puntos de intersección
+    let colors = puntosInterseccion.map((_, index) => `hsl(${index * 360 / puntosInterseccion.length}, 100%, 50%)`);
+
+    let puntos = {
+        x: puntosInterseccion.map(punto => punto[0]),
+        y: puntosInterseccion.map(punto => punto[1]),
+        mode: 'markers',
+        type: 'scatter',
+        name: 'Puntos de Intersección',
+        marker: {
+            color: colors,
+            size: 10
+        }
+    };
+
+    let puntosFactiblesPlot = {
+        x: puntosFactibles.map(punto => punto[0]),
+        y: puntosFactibles.map(punto => punto[1]),
+        mode: 'markers',
+        type: 'scatter',
+        name: 'Puntos Factibles',
+        marker: {
+            color: 'blue',
+            size: 10
+        }
+    };
+
+    let puntoOptimoPlot = {
+        x: [puntoOptimo[0]],
+        y: [puntoOptimo[1]],
+        mode: 'markers',
+        type: 'scatter',
+        name: 'Punto Óptimo',
+        marker: {
+            color: 'green',
+            size: 12,
+            symbol: 'star'
+        }
+    };
+
+    traces.push(puntos);
+    traces.push(puntosFactiblesPlot);
+    traces.push(puntoOptimoPlot);
+
+    let layout = {
+        title: 'Gráfico de Restricciones',
+        xaxis: {
+            title: 'X1'
+        },
+        yaxis: {
+            title: 'X2'
+        }
+    };
+
+    Plotly.newPlot('plot', traces, layout);
+    // Crear tabla con puntos de intersección
+    let resultTable = `
+        <table style="width:100%; border-collapse: collapse; text-align: center;">
+            <thead>
+                <tr>
+                    <th style="border: 1px solid #ddd; padding: 8px;">X1</th>
+                    <th style="border: 1px solid #ddd; padding: 8px;">X2</th>
+                    <th style="border: 1px solid #ddd; padding: 8px;">Z</th>
+                    <th style="border: 1px solid #ddd; padding: 8px;">Restricciones</th>
+                    <th style="border: 1px solid #ddd; padding: 8px;">Factible</th>
+                </tr>
+            </thead>
+            <tbody>
+    `;
+    puntosInterseccion.forEach((punto) => {
+        const esPuntoFactible = esFactible(punto[0], punto[1]) ? 'Sí' : 'No';
+        resultTable += `
+            <tr>
+                <td style="border: 1px solid #ddd; padding: 8px;">${punto[0]}</td>
+                <td style="border: 1px solid #ddd; padding: 8px;">${punto[1]}</td>
+                <td style="border: 1px solid #ddd; padding: 8px;">${punto[2]}</td>
+                <td style="border: 1px solid #ddd; padding: 8px;">${punto[3]}</td>
+                <td style="border: 1px solid #ddd; padding: 8px;">${esPuntoFactible}</td>
+            </tr>
+        `;
+    });
+    resultTable += `
+            </tbody>
+        </table>
+    `;
+
+    document.getElementById('result').innerHTML = resultTable;
+
+    // Mostrar Z óptima
+    let optimaTable = `
+        <h3>Z óptima</h3>
+        <table style="width:100%; border-collapse: collapse; text-align: center;">
+            <thead>
+                <tr>
+                    <th style="border: 1px solid #ddd; padding: 8px;">X1</th>
+                    <th style="border: 1px solid #ddd; padding: 8px;">X2</th>
+                    <th style="border: 1px solid #ddd; padding: 8px;">Z</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td style="border: 1px solid #ddd; padding: 8px;">${puntoOptimo[0]}</td>
+                    <td style="border: 1px solid #ddd; padding: 8px;">${puntoOptimo[1]}</td>
+                    <td style="border: 1px solid #ddd; padding: 8px;">${zOptima}</td>
+                </tr>
+            </tbody>
+        </table>
+    `;
+
+    document.getElementById('optima').innerHTML = optimaTable;
+}
