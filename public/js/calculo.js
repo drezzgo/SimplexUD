@@ -592,22 +592,27 @@ const startSimplex = () => {
 const getProblem = () => {
     const selectedMethod = metodo.value;
     console.log(selectedMethod);
-    const input = problem.value.trim(); // Obtiene y limpia los espacios en blanco a los extremos de las lineas
-    if (input !== '') {
-        calculationStart(); // Inicia el cálculo
-        const lines = input.split('\n'); // Crea un array con cada linea del problema, (funcion objetivo, restriccion1, restricion..., restriccionN)
 
-        lines.forEach((line, i) => {
-            if (i === 0) {
-                $.iobj = line.trim(); // La primera línea es la función objetivo
-            } else {
-                $.irows.push(line.trim()); // Las líneas siguientes son las restricciones
-            }
-        });
-        
-        if(selectedMethod === "grafico"){
-            alert("Seleccion");
-        } else {
+    if(selectedMethod == "grafico"){ //----> GRAFICO
+        const entrada = document.getElementById("problem");
+        console.log(typeof(entrada));
+        console.log(entrada);
+        terminos(entrada);
+    } else { //----> SIMPLEX
+    
+        const input = problem.value.trim(); // Obtiene y limpia los espacios en blanco a los extremos de las lineas
+        if (input !== '') {
+            calculationStart(); // Inicia el cálculo
+            const lines = input.split('\n'); // Crea un array con cada linea del problema, (funcion objetivo, restriccion1, restricion..., restriccionN)
+
+            lines.forEach((line, i) => {
+                if (i === 0) {
+                    $.iobj = line.trim(); // La primera línea es la función objetivo
+                } else {
+                    $.irows.push(line.trim()); // Las líneas siguientes son las restricciones
+                }
+            });
+                        
             const standardFormOutput = standardForm($.iobj, $.irows); // Convierte el problema a forma estándar
             console.log(standardFormOutput);
             $.target = standardFormOutput.target; // Establece el objetivo (minimizar o maximizar)
@@ -615,8 +620,9 @@ const getProblem = () => {
 
             startSimplex(); // Inicia el algoritmo simplex
             calculationEnd(); // Finaliza el cálculo
+            
+        } else {
+            printWarning('No ha ingresado valores', emptyMsg); // Imprime una advertencia si no se ingresaron valores
         }
-    } else {
-        printWarning('No ha ingresado valores', emptyMsg); // Imprime una advertencia si no se ingresaron valores
     }
 }

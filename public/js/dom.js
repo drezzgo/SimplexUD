@@ -1,5 +1,5 @@
-const defaultInput = 'min = 150x1 + 230x2 + 260x3 \nx1 + x2 + x3 <= 500\n2.5x1 + x2 - x3 >= 200\n3x2 + x1 >= 240\nx1 - 20x3 <= 0\nx3 <= 6000'
-
+const defaultInput2 = 'min = 150x1 + 230x2 + 260x3 \nx1 + x2 + x3 <= 500\n2.5x1 + x2 - x3 >= 200\n3x2 + x1 >= 240\nx1 - 20x3 <= 0\nx3 <= 6000'
+const defaultInput = 'max = 22x1 + 45x2 \n1x1 - 3x2 <= 42\n4x1 - 8x2 <= 40\n0.5x1 + 1x2 <= 15'
 //Para acceder a cada elemento que tiene un id en index.html 
 const problem = document.getElementById('problem')
 const solve = document.getElementById('solve')
