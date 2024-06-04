@@ -16,8 +16,9 @@ let restricciones = [];
 let equivalenciasRestricciones = [];
 let resultadoRestricciones = [];
 
-let entrada = 'max = 22x1 + 45x2 \n1x1 - 3x2 <= 42\n- 8x2 <= 40\n0.5x1 + 1x2 <= 15';
+let entrada = 'max = 22x1 + 45x2 \n1x1 - 3 x2 <= 42\n- 8x2 <= 40\n0.5x1 + 1x2 <= 15';
 let entradaMin = 'min = 2000x1 + 2000x2 \n1x1 + 2x2 >= 80\n3x1 + 2x2 >= 160\n5x1 + 2x2 >= 200'
+let defaultInput = 'max = 1x1 + 2x2\n1x1 + 3x2 >= 11\n2x1 + 1x2 >= 9'
 
 let partes = entradaMin.trim().split('\n');
 console.log(partes);

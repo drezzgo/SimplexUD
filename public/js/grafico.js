@@ -162,11 +162,14 @@ function esFactible(x, y) { //CHECK
 
    // if(tipoOptimizacion=="max"){
         for (let i = 0; i < CoefX1.length; i++) {
-            if (CoefX1[i] * x + CoefX2[i] * y > CostoT[i]) {
-                return false;
-            }
+        let val = CoefX1[i] * x + CoefX2[i] * y;
+        if ((vector_inecuacion[i] === '<=' && val > CostoT[i]) ||
+            (vector_inecuacion[i] === '>=' && val < CostoT[i]) ||
+            (vector_inecuacion[i] === '=' && val !== CostoT[i])) {
+            return false;
         }
-        return true;
+    }
+    return true;
     /*}else if(tipoOptimizacion=="min"){
 
         for (let i = 0; i < CoefX1.length; i++) {
