@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="public/icon/icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="public/icon/icon.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="public/icon/icon.png">
+  <link rel="manifest" href="icon/site.webmanifest">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
+  <link rel="stylesheet" href="public/index.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700&display=swap">
+
+  <title>Simplex 2 fases </title>
+</head>
+
+<body>
+  <header class="relative isolate py-10 px-6 sm:py-24">
+    <div class="mx-auto max-w-7xl lg:px-0">
+        <div class="mx-auto max-w-2xl lg-mx-0 text-left font-sans">
+            <p class="font-semibold text-xl sm:text-2xl text-gray-500">Programacion lineal</>
+            <h1 class="font-bold text-6xl sm:text-6xl tracking-tight text-red-500 ">Simplex <span class="text-amber-400">U</span>D</h1>
+            <p class="mt-2 text-lg leading-8 text-gray-500">Soluciona tus problemas de programacion lineal sease mediante el metodo simplex, dos fases o grafico.</p>
+        </div>
+    </div>
+  </header>
+
+  <section class="font-sans">
+    <div class="container">
+      <div class="block columns">
+        <div class="column is-three-fifths-desktop">
+          <div class=" flex items-center justify-center mb-4">
+            <div class="w-full max-w-xs">
+              <label class="text-xl font-bold text-red-500">Selecciona un método</label>
+              <select id="method-select" name="method-select" class="block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                  <option value="grafico" selected>Método Gráfico</option>
+                  <option value="simplex">Método Simplex</option>
+              </select>
+            </div>
+          </div>
+          <div class="block">
+            <textarea id="problem" class="textarea is-focused is-info" rows="10"></textarea>
+          </div>
+          <div class="level is-mobile">
+            <div class="level-item">
+              <button id="solve" class="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">Calcular</button>
+            </div>
+            <div class="level-item">
+              <button id="reset" class="bg-gray-100 hover:bg-gray-200 text-red-500 font-semibold py-2 px-4 rounded focus:outline-none focus:shadow-outline" disabled>Reiniciar</button>
+            </div>
+            <div class="level-item">
+              <button id="history" data-target="history-modal" class="bg-gray-100 hover:bg-gray-200 text-red-500 font-semibold py-2 px-4 rounded focus:outline-none focus:shadow-outline js-modal-trigger">Historial</button>
+            </div>
+          </div>
+          <div class="block" id="empty-msg"></div>
+        </div>
+        <div class="card column " classs="has-text-justified">          
+          <div class="text-left m-4">
+              <h2 class="font-bold text-xl text-red-500">¿Como usarlo? ¡Facil!</h2>
+              <p>Debes cumplir una sintaxis estandar para que podamos resolver tu problema...<br> ¡sin problemas!<br><br>
+                  <span class="text-red-500 font-bold">Paso 1</span><br>
+                  Para empezar, empieza por definir la <span class="text-red-400 font-semibold">funcion objetivo</span> (Min/Max)<br><br>
+                  Por ejemplo : <span class=" font-semibold">max: 3x1 + 2x2</span><br><br>
+                  <span class="text-red-500 font-bold">Paso 2</span><br>
+                  Acontinuacion, escribe las <span class="text-red-400 font-semibold">restricciones</span> a las que se sujeta el problema, ¡diferencialas con un salto de linea!<br><br>
+                  Por ejemplo :
+              </p>
+              <ul class="list-none list-inside ml-4 font-semibold">
+                  <li>2x1 + x2 <= 18</li>
+                  <li>2x1 + 3x3 <= 42</li>
+                  <li>3x1 + x2 >= 24</li>
+              </ul>
+              <br>
+              <p>De igual manera no te preocupes, nosotros hemos puesto este ejemplo para ti en el cuadro de texto.<br><br>
+                  <input type="checkbox" name="lista" id="lista" class="mr-1">
+                  ¿Mas dudas de como usarlo?, aqui una lista de mas especificaciones de la sintaxis.
+              </p>
+          </div>
+          <div id="informacionAdicional" class="hidden text-left mx-4">
+              <ul class="list-disc list-inside m-4">
+                  <li>El coeficiente debe ser un número real.</li>
+                  <li>Las variables deben ser identificadas con x1, x2, x3, etc.</li>
+                  <li>Los operadores permitidos son <=, >= y =.</li>
+              </ul>
+          </div>    
+        </div>  
+      </div>
+    </div>
+  <section/>
+  <div id="r_grafico" class="mt-4">
+    <div class="grid grid-rows-3">
+      <div id="plot" class="bg-red-500 py-2 h-96"></div>
+      <div id="result" class="bg-red-400 py-2"></div>
+      <div id="optima" class="bg-red-300 py-2"></div>
+    </div>
+  </div>
+  <div class="section">
+    <div class="container">
+      <div id="output"></div>
+    </div>
+  </div>
+  <div class="modal is-size-6" id="history-modal">
+    <div class="modal-background"></div>
+    <div class="modal-card">
+      <header class="modal-card-head">
+        <p class="modal-card-title">Input history</p>
+        <button class="delete" aria-label="close"></button>
+      </header>
+      <section class="modal-card-body">
+        <p>No history, start using to save history.</p>
+      </section>
+      <footer class="modal-card-foot">
+        <button class="button">Cancelar</button>
+      </footer>
+    </div>
+  </div>
+  <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.min.js" defer></script>
+  <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="public/js/calculo.js"></script>
+  <script src="public/js/grafico.js"></script>
+  <script src="public/js/dom.js"></script>
+</body>
+
+</html>
