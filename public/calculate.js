@@ -126,8 +126,13 @@ const parseConstraint = (irows) => {
             signs.push('ge'); // Si es >=, agrega 'ge' al array de tipos de restricciones
             return ge;
         }
-        signs.push('e'); // Si es =, agrega 'e' al array de tipos de restricciones
-        return row.split('=');
+        const eq = row.split('=');
+        if (eq.length === 2) {
+            signs.push('e'); // Si es =, agrega 'e' al array de tipos de restricciones
+            return eq;
+        }
+           // Si no se encuentra ningún operador válido, lanza un error
+           throw new Error(`Operador de restricción no reconocido en: ${row}`);
     });
     // Obtiene el vector de recursos de las restricciones después de convertirlos a números de coma flotante
     const rVector = rows.map(row => parseFloat(row[1].trim()));
