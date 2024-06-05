@@ -363,7 +363,7 @@ const printHeaderNumRowCol = (arr, cls) => {
 
 const printTableHead = (phase) => {
     const thead = createNode('thead')
-    const cBasis = createNode('th', [], 'current\nbasis')
+    const cBasis = createNode('th', [], 'Base\nActual')
     cBasis.setAttribute('rowspan', 2)
     const cBasicVars = createNode('th', [], 'variables\nbasicas')
     cBasicVars.setAttribute('rowspan', 2)
