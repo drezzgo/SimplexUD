@@ -1,4 +1,4 @@
-//DEFINICIÓN DE CADA UNA DE LAS VARIABLES 
+
 let $ = {
     maxIter: 50,
     iobj: undefined,
@@ -31,95 +31,54 @@ let $ = {
 const lclStorageKey = 'simplex2p'
 
 const findTerms = (row) => {
-    // Inicializa un array vacío para almacenar los términos procesados
-    let rowTerm = [];
-    // Divide la cadena 'row' en subcadenas usando una expresión regular
-    // La expresión regular (?=\+|\-) busca posiciones que son seguidas por un '+' o un '-'
-    const terms = row.split(/(?=\+|\-)/gm);
-    
-    // Itera sobre cada término en el array 'terms'
+    let rowTerm = []
+    const terms = row.split(/(?=\+|\-)/gm)
     terms.forEach(term => {
-        // Elimina los espacios en blanco al principio y al final del término
-        term = term.trim();
-        
-        // Si el término no es una cadena vacía, lo agrega al array 'rowTerm'
-        if (term !== '') rowTerm.push(term);
-    });
-    
-    // Devuelve el array de términos procesados
-    //alert(rowTerm);
-    return rowTerm;
-
+        term = term.trim()
+        if (term !== '') rowTerm.push(term)
+    })
+   
+    return rowTerm
+  
 }
 
-//FUNCION ENCUENTRA  LOS COEFICIENTES 
 const findCoeff = (row) => {
-    // Inicializa un objeto vacío para almacenar las variables y sus coeficientes
-    let vars = {};
-
-    // Itera sobre cada término en el array 'row'
+    let vars = {}
     row.forEach(term => {
-        // Encuentra la variable (una cadena que empieza con una letra y sigue con cualquier caracter)
-        const variable = /[a-z].+/gmi.exec(term)[0];
-        
-        // Encuentra el índice donde comienza la variable en el término
-        const i = term.search(/[a-z].+/gmi);
-
-        // Extrae la parte del término que corresponde al valor del coeficiente
-        const value = term.slice(0, i);
-
-        let coeff;
-
-        // Determina el coeficiente basado en el valor extraído
+        const variable = /[a-z].+/gmi.exec(term)[0]
+        const i = term.search(/[a-z].+/gmi)
+        const value = term.slice(0, i)
+        let coeff
         if (value.includes('-')) {
-            // Si el valor contiene un '-', el coeficiente es negativo
-            const q = value.replace('-', '').trim();
+            const q = value.replace('-', '').trim()
             if (q === '') {
-                coeff = -1; // Caso especial: solo '-' significa un coeficiente de -1
+                coeff = -1
             } else {
-                coeff = -1 * parseFloat(q); // Convertir a número y hacer negativo
+                coeff = -1 * parseFloat(q)
             }
         } else {
-            // Si el valor no contiene un '-', el coeficiente es positivo
-            const q = value.replace('+', '').trim();
+            const q = value.replace('+', '').trim()
             if (q === '') {
-                coeff = 1; // Caso especial: solo '+' o espacio significa un coeficiente de 1
+                coeff = 1
             } else {
-                coeff = parseFloat(q); // Convertir a número
+                coeff = parseFloat(q)
             }
         }
-        // Agrega la variable a la lista de variables si no está ya incluida
-        if (!$.variables.includes(variable)) $.variables.push(variable);
-
-        // Almacena el coeficiente en el objeto 'vars' con la variable como clave
-        vars[variable] = coeff;
-    });
-
-    // Devuelve el objeto con las variables y sus coeficientes
-    return vars;
+        if (!$.variables.includes(variable)) $.variables.push(variable)
+        vars[variable] = coeff
+    })
+    alert(JSON.stringify(vars, null, 2));
+    return vars
 }
 
-
-
 const parseObj = (iobj) => {
-    // Divide la cadena 'iobj' en dos partes utilizando '=' como separador
-    // 'mtarget' será la parte antes del '='
-    // 'row' será la parte después del '='
-    const [mtarget, row] = iobj.split('=');
+    const [mtarget, row] = iobj.split('=')
+    const target = mtarget.trim().toLowerCase()
+    const objvalue = findCoeff(findTerms(row))
+        // Mostrar un alert con los valores de retorno
+        alert(`target es: ${target}, objvalue es: ${JSON.stringify(objvalue)}`)
     
-    // Elimina los espacios en blanco al principio y al final de 'mtarget'
-    // Convierte 'mtarget' a minúsculas
-    const target = mtarget.trim().toLowerCase();
-    
-    // Procesa 'row' para encontrar términos y coeficientes
-    // 'findTerms' divide 'row' en términos individuales
-    // 'findCoeff' toma los términos y encuentra los coeficientes
-    const objvalue = findCoeff(findTerms(row));
-    
-    // Devuelve un objeto con dos propiedades:
-    // 'target': la cadena procesada antes del '=', en minúsculas y sin espacios en blanco
-    // 'objvalue': un objeto que contiene las variables y sus coeficientes
-    return { target, objvalue };
+    return { target, objvalue }
 }
 
 const parseConstraint = (irows) => {
@@ -141,6 +100,7 @@ const parseConstraint = (irows) => {
     const rVector = rows.map(row => parseFloat(row[1].trim()))
     const rowTerms = rows.map(row => findTerms(row[0]))
     const coeffDict = rowTerms.map(row => findCoeff(row))
+    
     return { rVector, coeffDict, signs }
 }
 
@@ -184,33 +144,38 @@ const findRemaining = (matrix, i) => {
 }
 
 const addVars = (q, i) => {
-    const rowWith1 = [...$.matrixA[i], q === 'exedente' ? -1 : 1]
+    const rowWith1 = [...$.matrixA[i], q === 'srpls' ? -1 : 1]
     $.variables.push(`${q}${i}`)
     const remainingRows = findRemaining($.matrixA, i)
     let newRemainingRows = remainingRows.map(row => [...row, 0])
     newRemainingRows.splice(i, 0, rowWith1)
     $.matrixA = newRemainingRows
-    if (q !== 'R') $.costVector.push(0)
+    if (q !== 'artfcl') $.costVector.push(0)
     return rowWith1.length - 1
 }
 
 const addSlackSurplusArtificial = (signs) => {
     signs.forEach((sign, i) => {
         if (sign === 'le') {
-            const pivot = addVars('H', i)
+            const pivot = addVars('slck', i)
             $.pivots.push(pivot)
             return
         }
         if (sign === 'ge') {
-            addVars('exedente', i)
-            const pivot = addVars('R', i)
+            addVars('srpls', i)
+            const pivot = addVars('artfcl', i)
             $.pivots.push(pivot)
             return
         }
+        if(sign === 'e'){
+            const pivot = addVars('artfcl', i)
+            $.pivots.push(pivot)
+            return
+        }
+
     })
 }
 
-// Convierte la función objetivo y las restricciones dadas en su forma estándar.
 const standardForm = (iobj, irows) => {
     const { target, objvalue } = parseObj(iobj)
     let { rVector, coeffDict, signs } = parseConstraint(irows)
@@ -219,23 +184,21 @@ const standardForm = (iobj, irows) => {
     removeBNegative(bNegativeIndex, coeffDict, rVector)
     assignZeroCoeff(coeffDict)
     $.matrixA = formMatrixA(coeffDict)
-    printSubtitle('Convertiendo a su forma estandar ')
-    printTableCardStandardForm('Matriz de coeficientes de entrada :')
+    printSubtitle('Converting to standard form')
+    printTableCardStandardForm('Input coefficient matrix:')
     $.basicKount = $.variables.length
-    // Imprime la lista de variables básicas.
-    printVariables('Variables')
+    printVariables('Basic')
     addSlackSurplusArtificial(signs)
     $.nonBasicKount = $.variables.length - $.basicKount
     $.artificialKount = $.variables.length - ($.basicKount + $.nonBasicKount)
-    printTableCardStandardForm('Matriz de coeficientes después de sumar variables de holgura, excedentes y artificiales:')
-    // Imprime la lista de variables no básicas.
-    printVariables('Variables no ')
+    printTableCardStandardForm('Coefficient matrix after adding slack, surplus and artificial variables:')
+    printVariables('Non-basic')
     return { target, rVector }
 }
 
 const getPhase1CostVector = () => {
     return $.variables.map(v => {
-        if (v.includes('R')) return 1
+        if (v.includes('artfcl')) return 1
         return 0
     })
 }
@@ -280,6 +243,8 @@ const findRCost = (cVector) => {
     for (let j = 0; j < $.dim[1]; j++) {
         cjBar.push(getCJBar(j, cVector, $.basis))
     }
+     // Mostrar todos los valores de cjBar
+     alert(`Valores de cjBar: ${cjBar.join(', ')}`)
     return cjBar
 }
 
@@ -293,21 +258,28 @@ const getDim = () => {
     return [m, n]
 }
 
+
+
 const findLeavingVar = (col) => {
     let p = []
     for (let i = 0; i < $.dim[0]; i++) {
         p.push($.matrixA[i][col])
     }
     $.ratio = vDivide($.rVector, p)
-    const filteredRatio = $.ratio.filter(q => q >= 0 && q !== Infinity)
+    const filteredRatio = $.ratio.filter(q => q >= 0 && q !== Infinity  && !isNaN(q))
     if (filteredRatio.length === 0) {
         $.unbounded = true
         return -1
     }
     const minRatio = Math.min(...filteredRatio)
     const index = $.ratio.indexOf(minRatio)
+        // Mostrar el mínimo ratio en un alerta
+        alert(`Minimo radio es : ${minRatio}`)
+   
     return index
 }
+
+
 
 const rowOperation = (row, col) => {
     const element = $.matrixA[row][col]
@@ -335,7 +307,7 @@ const updatePivot = (row, col) => {
     $.pivots[row] = col
 }
 
-const containsArtificial = () => $.basicVars.some(b => b.includes('R'))
+const containsArtificial = () => $.basicVars.some(b => b.includes('artfcl'))
 
 const findTargetRCost = (target, rCost) => {
     if (target === 'min') {
@@ -375,14 +347,14 @@ const simplex = (phase) => {
     $.leavingIndex = findLeavingVar($.minmaxRCostIndex)
     printRatio(card)
     if ($.leavingIndex === -1) {
-        const msg = 'Todas las proporciones mínimas son negativas o infinitas, por lo que la solucion es indefinida.'
+        const msg = 'All minimum ratios are negative or infinity, hence solution is unbounded.'
         printWarning(msg, card)
         return false
     }
     printEnteringLeavingVar(card)
     const historyNotRepeat = checkHistory()
     if (!historyNotRepeat) {
-        const msg = 'La fase 1 ha concluido. Procediendo a la fase 2 o evaluando la solución actual.'
+        const msg = 'Degeneracy exists, stopping.'
         printWarning(msg, card)
         return false
     }
@@ -394,7 +366,7 @@ const simplex = (phase) => {
 const removeArtificial = () => {
     let artificialIndex = []
     $.variables = $.variables.filter((v, i) => {
-        if (v.includes('R')) {
+        if (v.includes('artfcl')) {
             artificialIndex.push(i)
             return false
         }
@@ -410,11 +382,11 @@ const removeArtificial = () => {
     $.matrixA = $.matrixA.map(row => {
         return row.filter((q, i) => !artificialIndex.includes(i))
     })
-    printWarning('Todas las variables artificiales se eliminan de la base (Ri).', output)
+    printWarning('All artificial variables are removed from the basis.', output)
 }
 
 const phase1 = () => {
-    printSubtitle('Fase 1: Eliminar variables artificiales ')
+    printSubtitle('Phase 1: removing artificial variables')
     $.dim = getDim()
     $.p1CostVector = getPhase1CostVector()
     while ($.kount <= $.maxIter) {
@@ -424,7 +396,7 @@ const phase1 = () => {
         $.kount++
     }
     if ($.kount === $.maxIter + 1) {
-        printWarning(`Iteración máxima alcanzada en la fase 1`, output)
+        printWarning(`Maximum iteration reached at phase 1`, output)
         return
     }
     if ($.unbounded) return
@@ -432,15 +404,17 @@ const phase1 = () => {
 }
 
 const phase2 = () => {
-    printSubtitle('Fase 2: Encontrando una solución óptima')
+    printSubtitle('Phase 2: finding optimal solution')
     $.dim = getDim()
     while ($.kount <= $.maxIter) {
         $.basicVars = getBasicVars()
         if (!simplex(2)) break
+        alert('Estado de la tabla después de la iteración ' + $.kount + ': ' + JSON.stringify($.matrixA))
         $.kount++
     }
     if ($.kount === $.maxIter + 1) {
-        printWarning(`Iteración máxima alcanzada en la fase 2 `, output)
+        printWarning(`Maximum iteration reached at phase 2`, output)
+        alert('Resultado final después de la fase 2: ' + JSON.stringify($.matrixA))
         return
     }
 }
@@ -470,6 +444,6 @@ const getProblem = () => {
         startSimplex()
         calculationEnd()
     } else {
-        printWarning('No ha ingresado valores', emptyMsg)
+        printWarning('empty input', emptyMsg)
     }
 }
