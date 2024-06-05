@@ -365,7 +365,7 @@ const printTableHead = (phase) => {
     const thead = createNode('thead')
     const cBasis = createNode('th', [], 'current\nbasis')
     cBasis.setAttribute('rowspan', 2)
-    const cBasicVars = createNode('th', [], 'basic\nvariable')
+    const cBasicVars = createNode('th', [], 'variables\nbasicas')
     cBasicVars.setAttribute('rowspan', 2)
     const b = createNode('th', [], 'b')
     b.setAttribute('rowspan', 2)
@@ -472,7 +472,7 @@ const printEnteringLeavingVar = (card) => {
     const word = $.target === 'min' ? 'más pequeño' : 'más grande'
     const ev1 = `Variable de entrada :Entre todos los costos relativos  (Cj-Zj)`
     const ev2 = `${checkDecimals($.minmaxRCost)} is ${word}`
-    const ev3 = `So ${$.variables[$.minmaxRCostIndex]} is the entering variable`
+    const ev3 = `por lo tanto  ${$.variables[$.minmaxRCostIndex]} es la variable de entrada`
     const ev = `${ev1}, ${ev2}. ${ev3}.`
 
     const lv1 = `Variable de Salida: Entre todas las razones (Radio)`
