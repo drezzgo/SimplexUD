@@ -89,6 +89,7 @@ const findCoeff = (row) => {
         vars[variable] = coeff;
     });
     // Devuelve el objeto con las variables y sus coeficientes
+    alert(vars)
     return vars;
 }
 
@@ -131,8 +132,7 @@ const parseConstraint = (irows) => {
             signs.push('e'); // Si es =, agrega 'e' al array de tipos de restricciones
             return eq;
         }
-           // Si no se encuentra ningún operador válido, lanza un error
-           throw new Error(`Operador de restricción no reconocido en: ${row}`);
+        
     });
     // Obtiene el vector de recursos de las restricciones después de convertirlos a números de coma flotante
     const rVector = rows.map(row => parseFloat(row[1].trim()));
