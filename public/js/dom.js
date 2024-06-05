@@ -387,7 +387,7 @@ const printTableHead = (phase) => {
 
 const printTableFoot = () => {
     const tfoot = createNode('tfoot')
-    const cjbar = createNode('th', [], 'Costo relativo ')
+    const cjbar = createNode('th', [], 'Costo relativo (Cj-Zj)')
     cjbar.setAttribute('colspan', 2)
     const rCostRow = printHeaderNumRowCol($.rCost)
     const tr = createNode('tr', ['has-background-white-ter'])
@@ -469,15 +469,15 @@ const printEnteringLeavingVar = (card) => {
     const thRCost = card.querySelectorAll('tfoot tr th')[$.minmaxRCostIndex + 1]
     thRCost.classList.add('has-background-grey-lighter')
 
-    const word = $.target === 'min' ? 'lowest' : 'highest'
-    const ev1 = `Entering variable: Among all the relative cost`
+    const word = $.target === 'min' ? 'más pequeño' : 'más grande'
+    const ev1 = `Variable de entrada :Entre todos los costos relativos  (Cj-Zj)`
     const ev2 = `${checkDecimals($.minmaxRCost)} is ${word}`
     const ev3 = `So ${$.variables[$.minmaxRCostIndex]} is the entering variable`
     const ev = `${ev1}, ${ev2}. ${ev3}.`
 
-    const lv1 = `Leaving variable: Among all the ratios`
-    const lv2 = `${checkDecimals($.ratio[$.leavingIndex])} is lowest`
-    const lv3 = `So ${$.basicVars[$.leavingIndex]} is the leaving variable`
+    const lv1 = `Variable de Salida: Entre todas las razones (Radio)`
+    const lv2 = `${checkDecimals($.ratio[$.leavingIndex])} es la más baja `
+    const lv3 = `por lo tanto ${$.basicVars[$.leavingIndex]} es la variable de salida`
     const lv = `${lv1}, ${lv2}. ${lv3}.`
 
     const block = printEnteringLeavingTxt(ev, lv)
@@ -500,7 +500,7 @@ const printAnswer = () => {
     soln.appendChild(z)
     body.appendChild(soln)
 
-    const iter = createNode('div', ['block'], `Iterations taken: ${$.kount}`)
+    const iter = createNode('div', ['block'], `Número de iteraciones: ${$.kount}`)
     body.appendChild(iter)
     div.appendChild(body)
     output.appendChild(div)
