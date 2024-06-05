@@ -66,6 +66,8 @@ const clearOutput = (node) => {
     }
 }
 
+//Se cambia primero va reset calculator y luego llama a esa función 
+btnReset.addEventListener('click', resetCalculator)
 const resetCalculator = () => {
     problem.value = ''
     reset$()
@@ -73,7 +75,7 @@ const resetCalculator = () => {
     clearOutput(output)
 }
 
-btnReset.addEventListener('click', resetCalculator)
+
 
 const addToHistory = () => {
     const itemStr = localStorage.getItem(lclStorageKey)
@@ -201,7 +203,7 @@ document.addEventListener('DOMContentLoaded', () => {
             openModal($target)
         })
     })
-    document.querySelectorAll('.modal-background, .modal-close, .modal-card-head .delete, .modal-card-foot .button').forEach(($close) => {
+    document.querySelectorAll('.modal-background, .modal-close, .modal-card-head .delete, .modal-card-foot .button ').forEach(($close) => {
         const $target = $close.closest('.modal')
         $close.addEventListener('click', () => {
             closeModal($target)
@@ -212,7 +214,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (e.keyCode === 27) { // Escape key
             closeAllModals()
         }
-    })
+    }) 
 })
 
 const printTableHeadStandardForm = () => {
