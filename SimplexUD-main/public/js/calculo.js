@@ -207,7 +207,7 @@ const addVars = (q, i) => {
     // Actualiza la matriz de coeficientes con las nuevas filas
     $.matrixA = newRemainingRows;
     // Agrega un 0 al vector de costos si 'q' no es 'R' (para las variables artificiales)
-    if (q !== 'R') $.costVector.push(0);
+    if (q !== 'R' && q !== 'A') $.costVector.push(0);
     // Devuelve la longitud de la fila actualizada
     return rowWith1.length - 1;
 }
