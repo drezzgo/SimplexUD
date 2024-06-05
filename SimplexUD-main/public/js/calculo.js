@@ -47,7 +47,7 @@ const findTerms = (row) => {
         if (term !== '') rowTerm.push(term);
     });
     // Devuelve el array de términos procesados
-    alert(rowTerm);
+   // alert(rowTerm);
     return rowTerm;
 }
 
@@ -230,6 +230,7 @@ const addSlackSurplusArtificial = (signs) => {
             return;
         }
         if (sign === 'eq') { // Add artificial variable for equality
+            addVars('exedente', i)
             const artificial = addVars('A', i); // Use 'A' for artificial variable
             $.pivots.push(artificial);
             return
@@ -523,7 +524,7 @@ const removeArtificial = () => {
             artificialIndex.push(i); // Guarda su índice
             return false; // Elimínala del array de variables
         }
-      
+        
         return true; // Mantén las variables no artificiales
     });
 
@@ -545,6 +546,7 @@ const removeArtificial = () => {
 
     // Imprime una advertencia indicando que todas las variables artificiales han sido eliminadas
     printWarning('Todas las variables artificiales se eliminan de la base (Ri).', output);
+    alert(`Se eliminaron las variables artificiales en los índices: ${artificialIndex.join(', ')}. Los índices de pivotes se ajustaron en consecuencia.`);
 }
 
 // Fase 1 del algoritmo simplex: eliminar variables artificiales
