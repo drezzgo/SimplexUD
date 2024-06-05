@@ -486,7 +486,7 @@ const printEnteringLeavingVar = (card) => {
 
 const printAnswer = () => {
     const title = createNode('div', ['notification', 'has-background-primary', 'has-text-white'])
-    const p = createNode('p', ['subtitle'], 'Final solution')
+    const p = createNode('p', ['subtitle'], 'Solución Final')
     title.appendChild(p)
     output.appendChild(title)
 

@@ -33,23 +33,39 @@ const lclStorageKey = 'simplex2p'
 
 // Función que procesa una fila para encontrar términos individuales
 const findTerms = (row) => {
-    // Inicializa un array vacío para almacenar los términos procesados
     let rowTerm = [];
-    // Divide la cadena 'row' en subcadenas usando una expresión regular
-    // La expresión regular (?=\+|\-) busca posiciones que son seguidas por un '+' o un '-'
     const terms = row.split(/(?=\+|\-)/gm);
-    // Itera sobre cada término en el array 'terms'
     terms.forEach(term => {
-        // Elimina los espacios en blanco al principio y al final del término
         term = term.trim();
-
-        // Si el término no es una cadena vacía, lo agrega al array 'rowTerm'
-        if (term !== '') rowTerm.push(term);
+        if (term !== '') {
+            // Verifica si el término contiene una fracción
+            const match = term.match(/-?\d+\/\d+/);
+            if (match) {
+                const fraction = match[0];
+                const decimalValue = fractionToDecimal(fraction);
+                // Reemplaza la fracción en el término por su valor decimal
+                term = term.replace(fraction, decimalValue);
+            }
+            rowTerm.push(term);
+        }
     });
-    // Devuelve el array de términos procesados
-    alert(rowTerm);
+    alert(`Términos procesados: ${rowTerm}`);
     return rowTerm;
 }
+
+//Funcion Fraccion a decimal 
+const fractionToDecimal = (fraction) => {
+    const partes = fraction.split('/');
+    const numerador = parseFloat(partes[0]);
+    const denominador = parseFloat(partes[1]);
+
+    if (isNaN(numerador) || isNaN(denominador) || denominador === 0) {
+            return "Error: Fracción no válida";
+    }
+    var resultadoDecimal = numerador / denominador;
+    return  resultadoDecimal;
+}
+
 
 //FUNCION ENCUENTRA  LOS COEFICIENTES
 const findCoeff = (row) => {
@@ -64,22 +80,27 @@ const findCoeff = (row) => {
         // Extrae la parte del término que corresponde al valor del coeficiente
         const value = term.slice(0, i);
         let coeff;
-        // Determina el coeficiente basado en el valor extraído
-        if (value.includes('-')) {
-            // Si el valor contiene un '-', el coeficiente es negativo
-            const q = value.replace('-', '').trim();
-            if (q === '') {
-                coeff = -1; // Caso especial: solo '-' significa un coeficiente de -1
-            } else {
-                coeff = -1 * parseFloat(q); // Convertir a número y hacer negativo
+        if (value.includes('/')) {
+            coeff = fractionToDecimal(value);
+            if (isNaN(coeff)) {
+                coeff = "Error: Fracción no válida";
             }
         } else {
-            // Si el valor no contiene un '-', el coeficiente es positivo
-            const q = value.replace('+', '').trim();
-            if (q === '') {
-                coeff = 1; // Caso especial: solo '+' o espacio significa un coeficiente de 1
+            // Manejar el caso de valores negativos y positivos
+            if (value.includes('-')) {
+                const q = value.replace('-', '').trim();
+                if (q === '') {
+                    coeff = -1;
+                } else {
+                    coeff = -1 * parseFloat(q);
+                }
             } else {
-                coeff = parseFloat(q); // Convertir a número
+                const q = value.replace('+', '').trim();
+                if (q === '') {
+                    coeff = 1;
+                } else {
+                    coeff = parseFloat(q);
+                }
             }
         }
         // Agrega la variable a la lista de variables si no está ya incluida
@@ -89,6 +110,7 @@ const findCoeff = (row) => {
         vars[variable] = coeff;
     });
     // Devuelve el objeto con las variables y sus coeficientes
+    //alert("variables son "+vars);
     return vars;
 }
 
