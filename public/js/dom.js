@@ -125,7 +125,7 @@ const selectHistory = (i, value) => {
 const clearHistory = () => {
     localStorage.removeItem(lclStorageKey)
     clearOutput(historyBody)
-    const p = createNode('p', [], 'No history, start using to save history.')
+    const p = createNode('p', [], 'No hay historial, empieza a usar para guardar historial')
     historyBody.appendChild(p)
 }
 
@@ -137,7 +137,7 @@ const loadHistory = () => {
 
     const delAllDiv = createNode('div', ['block', 'level'])
 
-    const btn = createNode('button', ['level-right', 'button', 'is-danger'], 'Clear History')
+    const btn = createNode('button', ['level-right', 'button', 'is-danger'], 'Borrar Historial')
     btn.addEventListener('click', clearHistory)
     delAllDiv.appendChild(btn)
     historyBody.appendChild(delAllDiv)
@@ -298,7 +298,7 @@ const printTableBFS = () => {
 const printBFS = () => {
     const div = createNode('div', ['message'])
     const header = createNode('div', ['message-header'])
-    const p = createNode('p', [], 'Current basic feasible solution (BFS)')
+    const p = createNode('p', [], 'Solución básica factible actual (BFS)')
     header.appendChild(p)
     div.appendChild(header)
 
