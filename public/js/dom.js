@@ -155,9 +155,9 @@ const loadHistory = () => {
         div.appendChild(body)
 
         const footer = createNode('footer', ['card-footer'])
-        const select = createNode('a', ['card-footer-item'], 'Select')
+        const select = createNode('a', ['card-footer-item'], 'Seleccionar')
         select.addEventListener('click', () => { selectHistory(i, h.value) })
-        const del = createNode('a', ['card-footer-item', 'has-text-danger'], 'Delete')
+        const del = createNode('a', ['card-footer-item', 'has-text-danger'], 'Eliminar')
         del.addEventListener('click', () => { deleteHistory(i) })
 
         footer.appendChild(select)
