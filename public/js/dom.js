@@ -1,11 +1,11 @@
 const defaultInput4 = 'min = 150x1 + 230x2 + 260x3 \nx1 + x2 + x3 <= 500\n2.5x1 + x2 - x3 >= 200\n3x2 + x1 >= 240\nx1 - 20x3 <= 0\nx3 <= 6000'
-const defaultInput5 = 'max = 1x1 + 2x2\n1x1 + 3x2 >= 11\n2x1 + 1x2 >= 9'
+const defaultInput = 'max = 1x1 + 2x2\n1x1 + 3x2 >= 11\n2x1 + 1x2 >= 9'
 const defaultInput7 = 'min = 80x1 + 60x2\n0.2x1 + 0.32x2<=0.25\n1x1+1x2<=1'
 const defaultInput2 = 'max = 3000x1 + 2000x2 \n2x1 + 1x2 <= 100 \n1x1 + 1x2 <= 80 \n1x2 <= 40'
 const defaultInput3 = 'max = 22x1 + 45x2 \n1x1 - 3x2 <= 42\n4x1 - 8x2 <= 40\n0.5x1 + 1x2 <= 15'
 const defaultInputMax = 'max = 60x1 + 80x2 \n6x1 + 6x2 <= 300\n5x1 + 10x2 <= 400\n8x1 + 4x2 <= 320'
 const defaultInput6 = 'min = 60x1 + 80x2 \n6x1 + 6x2 <= 300\n5x1 + 10x2 <= 400\n8x1 + 4x2 <= 320'
-const defaultInput = 'min = 1.5x1 + 2.5x2 \n2x1 + 1x2 <= 90\n1x1 + 1x2 >= 50\n1x1 <= 10'
+const defaultInput5 = 'min = 1.5x1 + 2.5x2 \n2x1 + 1x2 <= 90\n1x1 + 1x2 >= 50\n1x1 <= 10'
 
 
 

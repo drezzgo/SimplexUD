@@ -21,7 +21,7 @@
     <div class="mx-auto max-w-7xl lg:px-0">
         <div class="mx-auto max-w-2xl lg-mx-0 text-left font-sans">
             <p class="font-semibold text-xl sm:text-2xl text-gray-500">Programacion lineal</>
-            <h1 class="font-bold text-6xl sm:text-6xl tracking-tight text-red-500 ">Simplex <span class="text-amber-400">U</span>D</h1>
+            <h1 class="font-bold text-7xl sm:text-7xl tracking-tight text-red-500">Simplex <span class="text-amber-400">U</span>D</h1>
             <p class="mt-2 text-lg leading-8 text-gray-500">Soluciona tus problemas de programacion lineal sease mediante el metodo simplex, dos fases o grafico.</p>
         </div>
     </div>
@@ -89,31 +89,57 @@
       </div>
     </div>
   <section/>
-  <div id="r_grafico" class="my-4 sm:my-10">
-      <div id="plot" class="flex 1 m sm:mx-20"></div>
-  </div>
-  <div id="result" class="flex justify-center 1 m-4 sm:mx-20"></div>
-  <div id="optima" class="flex 1 m-4 sm:mx-20"></div>
-  <div class="section">
-    <div class="container">
-      <div id="output"></div>
+  <section class="font-sans"> <!-- ----------------------GRAFICO------------------------->
+    <div id="r_grafico" class="my-4 sm:my-10">
+        <div id="plot" class="flex 1 m sm:mx-20"></div>
     </div>
-  </div>
-  <div class="modal is-size-6" id="history-modal">
-    <div class="modal-background"></div>
-    <div class="modal-card">
-      <header class="modal-card-head">
-        <p class="modal-card-title">Input history</p>
-        <button class="delete" aria-label="close"></button>
-      </header>
-      <section class="modal-card-body">
-        <p>No history, start using to save history.</p>
-      </section>
-      <footer class="modal-card-foot">
-        <button class="button">Cancelar</button>
-      </footer>
+    <div id="result" class="flex 1 justify-center m-4 sm:mx-20"></div>
+    <div id="optima" class="flex 1 justify-center m-4 sm:mx-20"></div>
+    <div class="section">
+      <div class="container">
+        <div id="output"></div>
+      </div>
     </div>
-  </div>
+  </section>
+  <section> <!-- ----------------------EQUIPO------------------------->
+    <div class="mx-32 mb-4">
+      <h2 class="font-bold text-4xl tracking-tight text-red-500">Equipo de desarrollo</h2>
+      <p>Integrantes del equipo encargado de desarrollar este proyecto para investigacion de operaciones como proyecto final</p>
+    </div>
+    <div class="grid gap-4 grid-cols-1 sm:grid-cols-3 lg:grid-cols-4 mx-40">
+      <div class="">
+        <div>
+          <img class="w-64 rounded-2xl mb-4" src="public/images/adfg.png" alt="Foto de programador Andres" />
+        </div>
+        <p>Andres Gongora</p>
+      </div>
+      <div class="">
+        <div>
+          <img class="w-64 rounded-2xl mb-4" src="public/images/kssh.png" alt="Foto de programador Andres" />
+        </div>
+        <p>Santiago Saldaña</p>
+      </div>
+      <div class=""></div>
+      <div class=""></div>
+    </div>
+  </section>
+  <section> <!-- ----------------------SIMPLEX------------------------->
+    <div class="modal is-size-6" id="history-modal">
+      <div class="modal-background"></div>
+      <div class="modal-card">
+        <header class="modal-card-head">
+          <p class="modal-card-title">Input history</p>
+          <button class="delete" aria-label="close"></button>
+        </header>
+        <section class="modal-card-body">
+          <p>No history, start using to save history.</p>
+        </section>
+        <footer class="modal-card-foot">
+          <button class="button">Cancelar</button>
+        </footer>
+      </div>
+    </div>
+</section>
   <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.min.js" defer></script>
   <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
   <script src="https://cdn.tailwindcss.com"></script>
@@ -121,5 +147,34 @@
   <script src="public/js/grafico.js"></script>
   <script src="public/js/dom.js"></script>
 </body>
+<footer class="font-sans text-gray-900 w-full border-primary border-t-2 flex flex-col md:flex-row justify-center items-center md:justify-between pt-2 pb-2 gap-y-10">
+  <span class="text-sm leading-6 text-gray-600 text-center mx-20">
+  2024 Universidad Distrital Franisco Jose de Caldas <span aria-hidden class="hidden md:inline">|</span
+  ><br aria-hidden class="block md:hidden" /> Todos los derechos reservados. <br> Docente : Edwing Oswaldo Berdugo Romero / eoberdigor@udistrital.edu.co || Estudiantes : Andres Gongora / afgongorar@udistrital.edu.co <br> Santiago Saldaña : kssaldanah@udistrital.edu.co || Santiago Gutierrez : avacostar@udistrital.edu.co || Jonathan Duarte : jyduarteb@udistrital.edu.co
+  </span>
 
+  <ul class="flex flex-row gap-x-6 items-center mx-20">
+      <li>
+          <a 
+          target="_blank"
+          rel="noopener"
+          href="https://www.udistrital.edu.co/inicio"
+          class="hover:scale-110 hover:opacity-70 transition inline-block scalw-"
+          >
+              <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2e/Escudo_UD.svg/2118px-Escudo_UD.svg.png" alt="Logo de La universidad distrital"  class="w-24 h-auto">
+          </a>
+      </li>
+      <li>
+          <a
+          target="_blank"
+          rel="noopener"
+          href="http://tecsistematizaciondatos.udistrital.edu.co:8080/inicio"
+          class="hover:scale-110 hover:opacity-70 transition inline-block"
+          >
+              <img src="https://yt3.googleusercontent.com/j_6mzF_h2FDaLoN0UDsR21aMagOCFEiW7DNGkJa1ja7NerFdcOk2Mz1EtvLmNmTawC4ar3DG=s900-c-k-c0x00ffffff-no-rj" alt="Logo de Tecnologia en Saneamiento Ambiental" class="w-24 h-auto">
+          </a>
+      </li>
+      <li></li>
+  </ul>
+</footer>
 </html>

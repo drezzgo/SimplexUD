@@ -606,7 +606,7 @@ const getProblem = () => {
             lines.forEach((line, i) => {
                 if (i === 0) {
                     $.iobj = line.trim(); // La primera línea es la función objetivo
-                } else {
+                } else {    
                     $.irows.push(line.trim()); // Las líneas siguientes son las restricciones
                 }
             });

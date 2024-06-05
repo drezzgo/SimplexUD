@@ -230,6 +230,7 @@ function GraficarRestricciones() {
     let puntosInterseccion = calcularIntersecciones();
     let puntosFactibles = obtenerPuntosFactibles();
     let { zOptima, puntoOptimo } = encontrarZOptima(puntosFactibles);
+    let valorMasGrande=Math.max(CostoT)
 
     CoefX1.forEach((coefX1, index) => {
         const coefX2 = CoefX2[index];
@@ -242,8 +243,16 @@ function GraficarRestricciones() {
             xValues.push(costo / coefX1, 0);
             yValues.push(0, costo / coefX2);
         } else {
-            xValues.push(0, 10); // Arbitrary large value for better visualization
+            xValues.push(0, valorMasGrande); // Arbitrary large value for better visualization
             yValues.push(costo / coefX2, costo / coefX2);
+        }
+
+        if(coefX2 !==0){
+            yValues.push(costo / coefX2, 0);
+            xValues.push(0, costo / coefX1);
+        }else{
+            yValues.push(0, valorMasGrande); // Arbitrary large value for better visualization
+            xValues.push(costo / coefX1, costo / coefX1);
         }
 
         let trace = {
@@ -316,56 +325,61 @@ function GraficarRestricciones() {
     Plotly.newPlot('plot', traces, layout);
     // Crear tabla con puntos de intersección
     let resultTable = `
-        <table class="table-auto">
+    <div class="overflow-x-auto">
+        <table class="table-auto w-full border-collapse">
             <thead>
                 <tr>
-                    <th class"border-separate border border-slate-500">X1</th>
-                    <th class"border-separate border border-slate-500">X2</th>
-                    <th class"border-separate border border-slate-500">Z</th>
-                    <th class"border-separate border border-slate-500">Restricciones</th>
-                    <th class"border-separate border border-slate-500">Factible</th>
+                    <th class = "px-6 py-2 border border-red-400 bg-red-500 text-white font-semibold">X1</th>
+                    <th class = "px-6 py-2 border border-red-400 bg-red-500 text-white font-semibold">X2</th>
+                    <th class = "px-6 py-2 border border-red-400 bg-red-500 text-white font-semibold">Z</th>
+                    <th class = "px-6 py-2 border border-red-400 bg-red-500 text-white font-semibold">Restricciones</th>
+                    <th class = "px-6 py-2 border border-red-400 bg-red-500 text-white font-semibold">Factible</th>
                 </tr>
             </thead>
             <tbody>
     `;
     puntosInterseccion.forEach((punto) => {
         const esPuntoFactible = esFactible(punto[0], punto[1]) ? 'Sí' : 'No';
+        const ColorFila = esPuntoFactible === 'No' ? 'text-red-400 hover:bg-red-500 hover:text-white' : '';
         resultTable += `
-            <tr>
-                <td style="border: 1px solid #ddd; padding: 8px;">${punto[0]}</td>
-                <td style="border: 1px solid #ddd; padding: 8px;">${punto[1]}</td>
-                <td style="border: 1px solid #ddd; padding: 8px;">${punto[2]}</td>
-                <td style="border: 1px solid #ddd; padding: 8px;">${punto[3]}</td>
-                <td style="border: 1px solid #ddd; padding: 8px;">${esPuntoFactible}</td>
-            </tr>
+                <tr class="${ColorFila} hover:bg-green-500 hover:text-white">
+                    <td class="px-6 py-2 border border-slate-300">${punto[0]}</td>
+                    <td class="px-6 py-2 border border-slate-300">${punto[1]}</td>
+                    <td class="px-6 py-2 border border-slate-300">${punto[2]}</td>
+                    <td class="px-6 py-2 border border-slate-300">${punto[3]}</td>
+                    <td class="px-6 py-2 border border-slate-300">${esPuntoFactible}</td>
+                </tr>
         `;
     });
     resultTable += `
-            </tbody>
-        </table>
+                </tbody>
+            </table>
+        </div>
     `;
 
     document.getElementById('result').innerHTML = resultTable;
 
     // Mostrar Z óptima
     let optimaTable = `
-        <h3>Z óptima</h3>
-        <table style="width:100%; border-collapse: collapse; text-align: center;">
+    <div>
+        <h3 class="py-4 text-2xl font-bold text-red-500 hover:text-red-400 text-center">Solucion</h3>
+        <table class="table-auto">
             <thead>
                 <tr>
-                    <th style="border: 1px solid #ddd; padding: 8px;">X1</th>
-                    <th style="border: 1px solid #ddd; padding: 8px;">X2</th>
-                    <th style="border: 1px solid #ddd; padding: 8px;">Z</th>
+                    <th class = "px-6 py-2 border border-red-400 bg-red-500 text-white font-semibold">X1</th>
+                    <th class = "px-6 py-2 border border-red-400 bg-red-500 text-white font-semibold">X2</th>
+                    <th class = "px-6 py-2 border border-red-400 bg-red-500 text-white font-semibold">Z</th>
                 </tr>
             </thead>
             <tbody>
                 <tr>
-                    <td style="border: 1px solid #ddd; padding: 8px;">${puntoOptimo[0]}</td>
-                    <td style="border: 1px solid #ddd; padding: 8px;">${puntoOptimo[1]}</td>
-                    <td style="border: 1px solid #ddd; padding: 8px;">${zOptima}</td>
+                    <td class="px-6 py-2 border border-slate-300">${puntoOptimo[0]}</td>
+                    <td class="px-6 py-2 border border-slate-300">${puntoOptimo[1]}</td>
+                    <td class="px-6 py-2 border border-slate-300">${zOptima}</td>
                 </tr>
             </tbody>
         </table>
+    </div>
     `;
 
     document.getElementById('optima').innerHTML = optimaTable;
