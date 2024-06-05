@@ -13,7 +13,6 @@ let X1_FunObj;
 let X2_FunObj;
 let zValue=[];
 
-
 function vaciarArreglos(){
     while(irestricciones.length > 0 || CostoT.length > 0 || Res_Sin_Signo.length > 0 || vector_inecuacion.length > 0 || CoefX1.length > 0 || CoefX2.length > 0 || terminosX1.length > 0 || terminosX2.length > 0  || zValue.length > 0)
         irestricciones.pop();
@@ -48,7 +47,6 @@ function terminos(entrada){
     
         partes[i] = partes[i].split(" ");
         console.log("Parte "+(i+1)+" : "+partes[i]+"\t|\t"+partes[i].length);    
-        console.log("EL programa va a: ", TipoObjetivo)
     
         let equivalencia;
         let resultado;
@@ -159,53 +157,70 @@ function calcularIntersecciones() { //CHECK
     return puntos;
 }
 function esFactible(x, y) { //CHECK
-
-   // if(tipoOptimizacion=="max"){
+    
+    if(TipoObjetivo=="max"){
         for (let i = 0; i < CoefX1.length; i++) {
-        let val = CoefX1[i] * x + CoefX2[i] * y;
-        if ((vector_inecuacion[i] === '<=' && val > CostoT[i]) ||
-            (vector_inecuacion[i] === '>=' && val < CostoT[i]) ||
-            (vector_inecuacion[i] === '=' && val !== CostoT[i])) {
-            return false;
-        }
-    }
-    return true;
-    /*}else if(tipoOptimizacion=="min"){
-
-        for (let i = 0; i < CoefX1.length; i++) {
-            if (CoefX1[i] * x + CoefX2[i] * y < CostoT[i]) {
+            let val = CoefX1[i] * x + CoefX2[i] * y;
+            if ((vector_inecuacion[i] === '<=' && val > CostoT[i]) ||
+                (vector_inecuacion[i] === '>=' && val < CostoT[i]) ||
+                (vector_inecuacion[i] === '=' && val !== CostoT[i])) {
                 return false;
             }
         }
-
-    }*/
-    
+        
+        return true;
+    }else if (TipoObjetivo == 'min') {
+        
+        for (let i = 0; i < CoefX1.length; i++) {
+            let val = CoefX1[i] * x + CoefX2[i] * y;
+            if ((vector_inecuacion[i] === '<=' && val > CostoT[i]) ||
+                (vector_inecuacion[i] === '>=' && val < CostoT[i]) ||
+                (vector_inecuacion[i] === '=' && val !== CostoT[i])) {
+                return false;
+            }
+        }
+       
+        return true;
+    }
 }
 function obtenerPuntosFactibles() { //CHECK
 
+    
     const puntosInterseccion = calcularIntersecciones();
-    return puntosInterseccion.filter(punto => esFactible(punto[0], punto[1]));
+    const puntosFactibles = puntosInterseccion.filter(punto => esFactible(punto[0], punto[1]));
+    
+    // Verificar si el origen es factible
+    const origenFactible = esFactible(0, 0);
+    if (origenFactible) {
+        puntosFactibles.push([0, 0, 0]);
+    }
+    
+    return puntosFactibles;
 }
 function encontrarZOptima(puntosFactibles) { //CHECK
 
-    let zOptima = -Infinity;
+    
+    let zOptima =TipoObjetivo==="max"? -Infinity:Infinity;
     let puntoOptimo = null;
-  //  if(tipoOptimizacion=="max"){
+  // 
 
     puntosFactibles.forEach(punto => {
-        if (punto[2] > zOptima) {
-            zOptima = punto[2];
-            puntoOptimo = punto;
-        }
-    });
-/* }else if(tipoOptimizacion=="min"){
-        puntosFactibles.forEach(punto => {
-            if (punto[2] <zOptima) {
+        if(TipoObjetivo=="max"){
+            
+            if (punto[2] > zOptima) { 
                 zOptima = punto[2];
                 puntoOptimo = punto;
             }
-        });
-    }*/
+        }else if(TipoObjetivo==="min"){
+            
+            if (punto[2] < zOptima) { 
+                zOptima = punto[2];
+                puntoOptimo = punto;
+            }
+        }
+        
+    });
+
 
     return { zOptima, puntoOptimo };
 }
@@ -301,14 +316,14 @@ function GraficarRestricciones() {
     Plotly.newPlot('plot', traces, layout);
     // Crear tabla con puntos de intersección
     let resultTable = `
-        <table style="width:100%; border-collapse: collapse; text-align: center;">
+        <table class="table-auto">
             <thead>
                 <tr>
-                    <th style="border: 1px solid #ddd; padding: 8px;">X1</th>
-                    <th style="border: 1px solid #ddd; padding: 8px;">X2</th>
-                    <th style="border: 1px solid #ddd; padding: 8px;">Z</th>
-                    <th style="border: 1px solid #ddd; padding: 8px;">Restricciones</th>
-                    <th style="border: 1px solid #ddd; padding: 8px;">Factible</th>
+                    <th class"border-separate border border-slate-500">X1</th>
+                    <th class"border-separate border border-slate-500">X2</th>
+                    <th class"border-separate border border-slate-500">Z</th>
+                    <th class"border-separate border border-slate-500">Restricciones</th>
+                    <th class"border-separate border border-slate-500">Factible</th>
                 </tr>
             </thead>
             <tbody>

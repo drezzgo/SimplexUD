@@ -1,4 +1,4 @@
-//DEFINICIÓN DE CADA UNA DE LAS VARIABLES 
+//DEFINICIÓN DE CADA UNA DE LAS VARIABLES
 let $ = {
     maxIter: 50, // Número máximo de iteraciones
     iobj: undefined, // Función objetivo inicial
@@ -42,7 +42,7 @@ const findTerms = (row) => {
     terms.forEach(term => {
         // Elimina los espacios en blanco al principio y al final del término
         term = term.trim();
-        
+
         // Si el término no es una cadena vacía, lo agrega al array 'rowTerm'
         if (term !== '') rowTerm.push(term);
     });
@@ -51,7 +51,7 @@ const findTerms = (row) => {
     return rowTerm;
 }
 
-//FUNCION ENCUENTRA  LOS COEFICIENTES 
+//FUNCION ENCUENTRA  LOS COEFICIENTES
 const findCoeff = (row) => {
     // Inicializa un objeto vacío para almacenar las variables y sus coeficientes
     let vars = {};
@@ -104,7 +104,7 @@ const parseObj = (iobj) => {
     // Procesa 'row' para encontrar términos y coeficientes
     // 'findTerms' divide 'row' en términos individuales
     // 'findCoeff' toma los términos y encuentra los coeficientes
-    const objvalue = findCoeff(findTerms(row));   
+    const objvalue = findCoeff(findTerms(row));
     // Devuelve un objeto con dos propiedades:
     // 'target': la cadena procesada antes del '=', en minúsculas y sin espacios en blanco
     // 'objvalue': un objeto que contiene las variables y sus coeficientes
@@ -394,7 +394,7 @@ const updatePivot = (row, col) => {
  * Verifica si hay variables artificiales presentes en las variables básicas.
  * @returns {boolean} true si hay al menos una variable artificial, false en caso contrario.
  */
-const containsArtificial = () => 
+const containsArtificial = () =>
     // Verifica si alguna de las variables básicas contiene 'R', indicando que es artificial
     $.basicVars.some(b => b.includes('R'));
 
@@ -422,7 +422,7 @@ const findTargetRCost = (target, rCost) => {
  * @param {number[]} v Vector de solución.
  * @returns {number} Valor de la solución actual.
  */
-const getSoln = (v) => 
+const getSoln = (v) =>
     // Calcula el producto punto del vector de solución con los costos de las variables básicas
     dotP(v, $.cBFS);
 
@@ -597,7 +597,7 @@ const getProblem = () => {
         const entrada = document.getElementById("problem");
         terminos(entrada);
     } else { //----> SIMPLEX
-    
+
         const input = problem.value.trim(); // Obtiene y limpia los espacios en blanco a los extremos de las lineas
         if (input !== '') {
             calculationStart(); // Inicia el cálculo
@@ -610,7 +610,7 @@ const getProblem = () => {
                     $.irows.push(line.trim()); // Las líneas siguientes son las restricciones
                 }
             });
-                        
+
             const standardFormOutput = standardForm($.iobj, $.irows); // Convierte el problema a forma estándar
             console.log(standardFormOutput);
             $.target = standardFormOutput.target; // Establece el objetivo (minimizar o maximizar)
@@ -618,7 +618,7 @@ const getProblem = () => {
 
             startSimplex(); // Inicia el algoritmo simplex
             calculationEnd(); // Finaliza el cálculo
-            
+
         } else {
             printWarning('No ha ingresado valores', emptyMsg); // Imprime una advertencia si no se ingresaron valores
         }
