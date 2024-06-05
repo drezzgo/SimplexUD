@@ -224,6 +224,11 @@ const addSlackSurplusArtificial = (signs) => {
             $.pivots.push(pivot);
             return;
         }
+         if (sign === 'e') {
+            // Agrega variables artificiales para las restricciones de tipo =
+            const pivot = addVars('R', i); // Prefijo "R" para indicar artificial
+            $.pivots.push(pivot);
+        }
     });
 }
 
