@@ -73,7 +73,33 @@ const resetCalculator = () => {
     clearOutput(output)
 }
 
+
+
 btnReset.addEventListener('click', resetCalculator)
+
+
+const decimalToFraction = (decimal) => {
+    var precision = 1e9;
+    var numerator = Math.round(decimal * precision);
+    var denominator = precision;
+
+    // Encontrar el máximo común divisor
+    function findGCD(a, b) {
+        return b === 0 ? a : findGCD(b, a % b);
+    }
+
+    // Calcular el máximo común divisor
+    var gcd = findGCD(numerator, denominator);
+
+    // Simplificar la fracción
+    var simplifiedNumerator = numerator / gcd;
+    var simplifiedDenominator = denominator / gcd;
+
+    // Crear la representación de la fracción
+    var fraction = simplifiedNumerator + "/" + simplifiedDenominator;
+
+    return fraction;
+};
 
 const addToHistory = () => {
     const itemStr = localStorage.getItem(lclStorageKey)
@@ -294,6 +320,7 @@ const printTableBFS = () => {
     table.appendChild(tbody)
     return table
 }
+
 
 const printBFS = () => {
     const div = createNode('div', ['message'])

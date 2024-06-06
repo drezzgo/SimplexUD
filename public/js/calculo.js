@@ -474,10 +474,12 @@ const checkHistory = () => {
 const checkDecimals = (n) => {
     // Busca si el número tiene más de 5 decimales
     const decimals = `${n}`.search(/\.\d{6,}/gmi);
+
+    // Si tiene más de 5 decimales, redondea el número a 5 decimales
+    if (decimals !== -1) return Number(n.toFixed(5));
+
     // Si no tiene más de 5 decimales, retorna el número original
-    if (decimals === -1) return n;
-    // Si tiene más de 5 decimales, lo redondea a 5 decimales
-    return n.toFixed(5);
+    return Number(n);
 }
 
 /**
