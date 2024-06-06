@@ -390,22 +390,22 @@ const printHeaderNumRowCol = (arr, cls) => {
 
 const printTableHead = (phase) => {
     const thead = createNode('thead')
-    const cBasis = createNode('th', [], 'Base\nActual')
+    const cBasis = createNode('th', ['is-vcentered', 'has-text-centered'], 'Cx / Cj')
     cBasis.setAttribute('rowspan', 2)
-    const cBasicVars = createNode('th', [], 'Variable\nbasica')
+    const cBasicVars = createNode('th', ['is-vcentered', 'has-text-centered'], 'Xb')
     cBasicVars.setAttribute('rowspan', 2)
-    const b = createNode('th', [], 'Xb')
+    const b = createNode('th', ['is-vcentered', 'has-text-centered'], 'Bi')
     b.setAttribute('rowspan', 2)
 
     const p1CVRow = phase == 1 ? printHeaderNumRowCol($.p1CostVector) : printHeaderNumRowCol($.costVector)
     const vRow = printHeaderRowCol($.variables)
 
-    const tr1 = createNode('tr', ['has-background-white-ter'])
+    const tr1 = createNode('tr', ['has-background-white-ter','is-vcentered', 'has-text-centered'])
     tr1.appendChild(cBasis)
     tr1.appendChild(cBasicVars)
     p1CVRow.forEach(r => tr1.appendChild(r))
     tr1.appendChild(b)
-    const tr2 = createNode('tr', ['has-background-white-ter'])
+    const tr2 = createNode('tr', ['has-background-white-ter','is-vcentered', 'has-text-centered'])
     vRow.forEach(r => tr2.appendChild(r))
     thead.appendChild(tr1)
     thead.appendChild(tr2)
@@ -414,10 +414,10 @@ const printTableHead = (phase) => {
 
 const printTableFoot = () => {
     const tfoot = createNode('tfoot')
-    const cjbar = createNode('th', [], 'Costo relativo (Cj-Zj)')
+    const cjbar = createNode('th', ['is-vcentered', 'has-text-centered'], 'Costo relativo (Cj-Zj)')
     cjbar.setAttribute('colspan', 2)
     const rCostRow = printHeaderNumRowCol($.rCost)
-    const tr = createNode('tr', ['has-background-white-ter'])
+    const tr = createNode('tr', ['has-background-white-ter','is-vcentered', 'has-text-centered'])
     tr.appendChild(cjbar)
     rCostRow.forEach(r => tr.appendChild(r))
     tfoot.appendChild(tr)
@@ -425,7 +425,7 @@ const printTableFoot = () => {
 }
 
 const printTable = (phase) => {
-    const table = createNode('table', ['table', 'is-narrow'])
+    const table = createNode('table', ['table', 'is-narrow','is-vcentered', 'has-text-centered'])
     const head = printTableHead(phase)
     const foot = printTableFoot()
     table.appendChild(head)
@@ -469,7 +469,7 @@ const printTableCard = (phase) => {
 
 const printRatio = (card) => {
     const trHead = card.querySelector('thead tr')
-    const th = createNode('th', [], 'Proporciones')
+    const th = createNode('th', ['is-vcentered', 'has-text-centered'], 'Bi / Xi')
     th.setAttribute('rowspan', 2)
     trHead.appendChild(th)
 

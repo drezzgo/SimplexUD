@@ -217,7 +217,7 @@ const findRemaining = (matrix, i) => {
 // Función para agregar variables (slack, surplus, artificial) a las restricciones y actualizar la matriz de coeficientes
 const addVars = (q, i) => {
     // Crea una nueva fila para la matriz de coeficientes con un 1 o -1 agregado al final, dependiendo de 'q'
-    const rowWith1 = [...$.matrixA[i], q === 'exedente' ? -1 : 1];
+    const rowWith1 = [...$.matrixA[i], q === 'S' ? -1 : 1];
     // Agrega el nombre de la nueva variable ('q' + 'i') al array de variables
     $.variables.push(`${q}${i}`);
     // Encuentra las filas restantes después de eliminar la fila actual de la matriz de coeficientes
@@ -245,7 +245,7 @@ const addSlackSurplusArtificial = (signs) => {
         }
         if (sign === 'ge') {
             // Agrega variables de excedente y artificiales para las restricciones de tipo >=
-            addVars('exedente', i);
+            addVars('S', i);
             const pivot = addVars('R', i);
             $.pivots.push(pivot);
             return;
