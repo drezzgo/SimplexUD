@@ -33,23 +33,39 @@ const lclStorageKey = 'simplex2p'
 
 // Función que procesa una fila para encontrar términos individuales
 const findTerms = (row) => {
-    // Inicializa un array vacío para almacenar los términos procesados
     let rowTerm = [];
-    // Divide la cadena 'row' en subcadenas usando una expresión regular
-    // La expresión regular (?=\+|\-) busca posiciones que son seguidas por un '+' o un '-'
     const terms = row.split(/(?=\+|\-)/gm);
-    // Itera sobre cada término en el array 'terms'
     terms.forEach(term => {
-        // Elimina los espacios en blanco al principio y al final del término
         term = term.trim();
-
-        // Si el término no es una cadena vacía, lo agrega al array 'rowTerm'
-        if (term !== '') rowTerm.push(term);
+        if (term !== '') {
+            // Verifica si el término contiene una fracción
+            const match = term.match(/-?\d+\/\d+/);
+            if (match) {
+                const fraction = match[0];
+                const decimalValue = fractionToDecimal(fraction);
+                // Reemplaza la fracción en el término por su valor decimal
+                term = term.replace(fraction, decimalValue);
+            }
+            rowTerm.push(term);
+        }
     });
-    // Devuelve el array de términos procesados
-    alert(rowTerm);
+//    alert(`Términos procesados: ${rowTerm}`);
     return rowTerm;
 }
+
+//Funcion Fraccion a decimal 
+const fractionToDecimal = (fraction) => {
+    const partes = fraction.split('/');
+    const numerador = parseFloat(partes[0]);
+    const denominador = parseFloat(partes[1]);
+
+    if (isNaN(numerador) || isNaN(denominador) || denominador === 0) {
+            return "Error: Fracción no válida";
+    }
+    var resultadoDecimal = numerador / denominador;
+    return  resultadoDecimal;
+}
+
 
 //FUNCION ENCUENTRA  LOS COEFICIENTES
 const findCoeff = (row) => {
@@ -64,22 +80,27 @@ const findCoeff = (row) => {
         // Extrae la parte del término que corresponde al valor del coeficiente
         const value = term.slice(0, i);
         let coeff;
-        // Determina el coeficiente basado en el valor extraído
-        if (value.includes('-')) {
-            // Si el valor contiene un '-', el coeficiente es negativo
-            const q = value.replace('-', '').trim();
-            if (q === '') {
-                coeff = -1; // Caso especial: solo '-' significa un coeficiente de -1
-            } else {
-                coeff = -1 * parseFloat(q); // Convertir a número y hacer negativo
+        if (value.includes('/')) {
+            coeff = fractionToDecimal(value);
+            if (isNaN(coeff)) {
+                coeff = "Error: Fracción no válida";
             }
         } else {
-            // Si el valor no contiene un '-', el coeficiente es positivo
-            const q = value.replace('+', '').trim();
-            if (q === '') {
-                coeff = 1; // Caso especial: solo '+' o espacio significa un coeficiente de 1
+            // Manejar el caso de valores negativos y positivos
+            if (value.includes('-')) {
+                const q = value.replace('-', '').trim();
+                if (q === '') {
+                    coeff = -1;
+                } else {
+                    coeff = -1 * parseFloat(q);
+                }
             } else {
-                coeff = parseFloat(q); // Convertir a número
+                const q = value.replace('+', '').trim();
+                if (q === '') {
+                    coeff = 1;
+                } else {
+                    coeff = parseFloat(q);
+                }
             }
         }
         // Agrega la variable a la lista de variables si no está ya incluida
@@ -89,6 +110,7 @@ const findCoeff = (row) => {
         vars[variable] = coeff;
     });
     // Devuelve el objeto con las variables y sus coeficientes
+    //alert("variables son "+vars);
     return vars;
 }
 
@@ -173,6 +195,10 @@ const removeBNegative = (bIndex, cDict, rVector) => {
 // Función para asignar coeficientes cero a las variables faltantes en las restricciones
 const assignZeroCoeff = (cDict) => {
     cDict.forEach((row, i) => {
+        // Contar el número de variables de restricción en esta fila
+        const numVariables = Object.keys(row).length;
+        console.log(`Número de variables de restricción en la fila ${i + 1}: ${numVariables}`);
+
         // Itera sobre las variables y si no están presentes en la restricción, asigna coeficiente cero
         $.variables.forEach(v => {
             if (!(v in row)) cDict[i][v] = 0;
@@ -223,6 +249,11 @@ const addSlackSurplusArtificial = (signs) => {
             const pivot = addVars('R', i);
             $.pivots.push(pivot);
             return;
+        }
+         if (sign === 'e') {
+            // Agrega variables artificiales para las restricciones de tipo =
+            const pivot = addVars('R', i); // Prefijo "R" para indicar artificial
+            $.pivots.push(pivot);
         }
     });
 }
@@ -275,18 +306,27 @@ const getBFS = () => {
 }
 
 const dotP = (v1, v2) => {
-    if (v1.length !== v2.length) return false;
-    // Realiza el producto punto entre dos vectores
+
+    if (v1.length !== v2.length) {
+        console.error("Los vectores no tienen la misma longitud.");
+        return false;
+    }
     let s = 0;
     v1.forEach((q, i) => s += q * v2[i]);
+    console.log(`Resultado del producto punto: ${s}`);
     return s;
+
 }
 
 const vDivide = (v1, v2) => {
     if (v1.length !== v2.length) return false;
     // Divide cada elemento del primer vector por el correspondiente del segundo vector
     let arr = [];
-    v1.forEach((q, i) => arr.push(q / v2[i]));
+    v1.forEach((q, i) => {
+        const result = q / v2[i];
+        arr.push(result);
+    //    alert(`Resultado de la división en posición ${i}: ${result}`);
+    });
     return arr;
 }
 
@@ -294,23 +334,31 @@ const vSubtract = (v1, v2) => {
     if (v1.length !== v2.length) return false;
     // Resta cada elemento del segundo vector del correspondiente del primer vector
     let arr = [];
-    v1.forEach((q, i) => arr.push(q - v2[i]));
+    v1.forEach((q, i) => {
+        const result = q - v2[i];
+        arr.push(result);
+     //   alert(`Resultado de la resta en posición ${i}: ${result}`);
+    });
     return arr;
 }
 
 // Función para calcular cjBar (costo reducido) de una variable
 const getCJBar = (col, cVector, basis) => {
+    console.log(`cVector: ${cVector}`);
+
     let p = [];
     // Construye el vector 'p' utilizando los elementos de la columna 'col' de la matriz A
     for (let i = 0; i < $.dim[0]; i++) {
         p.push($.matrixA[i][col]);
     }
+    console.log(`Vector p: ${p}`);
     // Calcula cjBar_j = cj_j - (p * basis)
     return cVector[col] - dotP(p, basis);
 }
 
 // Función para encontrar el costo reducido de todas las variables
 const findRCost = (cVector) => {
+    console.log("Longitud del vector cVector:", cVector.length);
     let cjBar = [];
     // Itera sobre todas las variables para calcular su costo reducido
     for (let j = 0; j < $.dim[1]; j++) {
@@ -341,12 +389,13 @@ const findLeavingVar = (col) => {
     }
     // Calcula las razones y filtra las negativas e infinitas
     $.ratio = vDivide($.rVector, p);
-    const filteredRatio = $.ratio.filter(q => q >= 0 && q !== Infinity);
+    const filteredRatio = $.ratio.filter(q => q >0 && q !== Infinity);
     // Si no hay razones válidas, la solución es no acotada
     if (filteredRatio.length === 0) {
         $.unbounded = true;
         return -1;
     }
+    console.log("Radios filtrados: " + filteredRatio.join(", "));
     // Encuentra la mínima razón y devuelve su índice
     const minRatio = Math.min(...filteredRatio);
     const index = $.ratio.indexOf(minRatio);
@@ -447,10 +496,11 @@ const checkHistory = () => {
 const checkDecimals = (n) => {
     // Busca si el número tiene más de 5 decimales
     const decimals = `${n}`.search(/\.\d{6,}/gmi);
+
+    // Si tiene más de 5 decimales, redondea el número a 5 decimales
+    if (decimals !== -1) return Number(n.toFixed(5));
     // Si no tiene más de 5 decimales, retorna el número original
-    if (decimals === -1) return n;
-    // Si tiene más de 5 decimales, lo redondea a 5 decimales
-    return n.toFixed(5);
+    return Number(n);
 }
 
 /**
@@ -533,7 +583,7 @@ const removeArtificial = () => {
     });
 
     // Imprime una advertencia indicando que todas las variables artificiales han sido eliminadas
-    printWarning('Todas las variables artificiales se eliminan de la base (Ri).', output);
+    printWarning('Todas las variables artificiales (Ri) se eliminan de la Tabla base.', output);
 }
 
 // Fase 1 del algoritmo simplex: eliminar variables artificiales

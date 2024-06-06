@@ -133,7 +133,7 @@
               <label class="text-xl font-bold text-red-500">Selecciona un método</label>
               <select id="method-select" name="method-select" class="block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
                   <option value="grafico" selected>Método Gráfico</option>
-                  <option value="simplex">Método Simplex</option>
+                  <option value="simplex">Método Simplex 2 fases </option>
               </select>
             </div>
           </div>
@@ -148,7 +148,7 @@
               <button id="reset" class="bg-gray-100 hover:bg-gray-200 text-red-500 font-semibold py-2 px-4 rounded focus:outline-none focus:shadow-outline">Reiniciar</button>
             </div>
             <div class="level-item">
-              <button id="history" class="bg-gray-100 hover:bg-gray-200 text-red-500 font-semibold py-2 px-4 rounded focus:outline-none focus:shadow-outline" data-target="history-modal">Historial</button>
+              <button id="history" class="bg-gray-100 hover:bg-gray-200 text-red-500 font-semibold py-2 px-4 rounded focus:outline-none focus:shadow-outline  js-modal-trigger" data-target="history-modal">Historial</button>
             </div>
           </div>
           <div class="block" id="empty-msg"></div>
@@ -261,11 +261,12 @@
       <div class="modal-background"></div>
       <div class="modal-card">
         <header class="modal-card-head">
-          <p class="modal-card-title">Input history</p>
+          <p class="modal-card-title">Historial de entrada</p>
           <button class="delete" aria-label="close"></button>
         </header>
         <section class="modal-card-body">
-          <p>No history, start using to save history.</p>
+          <p>
+           No hay historial, empieza a usar para guardar historial</p>
         </section>
         <section class="modal-card-foot">
           <button class="button">Cancelar</button>
