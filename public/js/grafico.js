@@ -1,118 +1,102 @@
-let irestricciones =[]; 
 let CostoT=[];
-let Res_Sin_Signo=[];
 let TipoObjetivo;
 let vector_inecuacion=[];
 let CoefX1=[];
 let CoefX2=[];
-let terminosX1=[];
-let terminosX2=[];
-let TerminoX1FunObj;
-let TerminoX2FunObj;
 let X1_FunObj;
 let X2_FunObj;
-let zValue=[];
+let malCoeficiente = [];
+
 
 function vaciarArreglos(){
-    while(irestricciones.length > 0 || CostoT.length > 0 || Res_Sin_Signo.length > 0 || vector_inecuacion.length > 0 || CoefX1.length > 0 || CoefX2.length > 0 || terminosX1.length > 0 || terminosX2.length > 0  || zValue.length > 0)
-        irestricciones.pop();
-        CostoT.pop()
-        Res_Sin_Signo.pop()
-        vector_inecuacion.pop()
-        CoefX1.pop()
-        CoefX2.pop()
-        terminosX1.pop()
-        terminosX2.pop()
-        zValue.pop()
-    }
+    CostoT=[];
+    vector_inecuacion=[];
+    CoefX1=[];
+    CoefX2=[];
+    terminosX1=[];
+    terminosX2=[];
+}
 
 function terminos(entrada){
-    vaciarArreglos();
-    let restricciones = [];
-    let equivalenciasRestricciones = [];
-    let resultadoRestricciones = [];
-    //let entradaMax = 'max = 22x1 + 45x2 \n1x1 - 3x2 <= 42\n4x1 - 8x2 <= 40\n0.5x1 + 1x2 <= 15';
-    //let entradaMin = 'min = 2000x1 + 2000x2 \n1x1 + 2x2 >= 80\n3x1 + 2x2 >= 160\n5x1 + 2x2 >= 200'
-    let partes = entrada.value.trim().split('\n');
-    console.log(partes);
+        vaciarArreglos();
+        let restricciones = [];
+        let equivalenciasRestricciones = [];
+        let resultadoRestricciones = [];
+        //let entradaMax = 'max = 22x1 + 45x2 \n1x1 - 3x2 <= 42\n4x1 - 8x2 <= 40\n0.5x1 + 1x2 <= 15';
+        //let entradaMin = 'min = 2000x1 + 2000x2 \n1x1 + 2x2 >= 80\n3x1 + 2x2 >= 160\n5x1 + 2x2 >= 200'
+        let partes = entrada.value.trim().split('\n');
+        let posible = true;
+
+        
+
+        console.log(partes);
     
-    for (let i = 0; i < partes.length; i++) {
-        if (i == 0 && partes[i].trim().includes("max")){
-            TipoObjetivo = "max";
-        } else if (i == 0 && partes[i].trim().includes("min")){
-            TipoObjetivo = "min";
+        for (let i = 0; i < partes.length; i++) {
+            if (i == 0) {
+                if (partes[i].trim().includes("max")) {
+                    TipoObjetivo = "max";
+                } else if (partes[i].trim().includes("min")) {
+                    TipoObjetivo = "min";
+                }
+            }
+
+            partes[i] = partes[i].trim().replace("max = ", "").replace("min = ", "").replace("- ", "-").replace(" + ", " ");
+            partes[i] = partes[i].split(" ");
+            console.log("Parte "+(i+1)+" : "+partes[i]+"\t|\t"+partes[i].length);
+            
+            let variableInvalida = partes[i].some(term => /x[3-9]/.test(term));
+            if (variableInvalida) {
+                alert("Ingresaste variables con subindice diferente a 1 y 2\n\nPara mas claridad lee el manual");
+                partes = [];
+                posible = false;
+                break;
+            }
+            let equivalencia;
+            let resultado;
+    
+    
+            if (i != 0 && partes[i].length > 4 ){
+                alert("Ingresaste mas de dos variables, resuelve el problema con el metodo SIMPLEX\n\nPara mas claridad lee la teoria del inicio")
+                partes = [];
+                posible=false;
+                break;
+
+            } else if (i == 0 && partes[i].length == 2 && ( !(Math.sign(partes[i][0]) < 0 && Math.sign(partes[i][1]) < 0) ) ){ //Funcion objetivo
+                restricciones.push([partes[i][0], partes[i][0]]);
+                X1_FunObj = parseFloat(partes[i][0]);
+                X2_FunObj = parseFloat(partes[i][1]);
+                
+            }else if(i != 0 && partes[i].length == 3 && partes[i][0].includes("x1")){ //Restricciones solo con 1 termino
+                CoefX1.push(parseFloat(partes[i][0]));
+                CoefX2.push(0);
+                vector_inecuacion.push(partes[i][1])
+                CostoT.push(parseFloat(partes[i][2]));
+        
+            } else if(i != 0 && partes[i].length == 3 && partes[i][0].includes("x2")){ //Restricciones solo con 1 termino
+                CoefX1.push(0);
+                CoefX2.push(parseFloat(partes[i][0]));
+                vector_inecuacion.push(partes[i][1])
+                CostoT.push(parseFloat(partes[i][2]));
+        
+            } else if (i != 0 && partes[i].length == 4) { //Restricciones solo con 2 terminos
+                CoefX1.push(parseFloat(partes[i][0]));
+                CoefX2.push(parseFloat(partes[i][1]));
+                vector_inecuacion.push(partes[i][2])
+                CostoT.push(parseFloat(partes[i][3]));
+                
+            } else if(i != 0 && partes[i].length <= 2 || (i != 0 && partes[i].length == 3 && !partes[i][0].includes("x")) || (partes[i].length == 3 && typeof(partes[i][2]) != Number)) { //Si tienen menos de 1 termino o mas de 2, esta mal formulado
+                alert("Ingresaste mal el problema, ingresaste una mala sintaxis o no incluiste variables ")
+                partes = [];
+                posible=false;
+                break;
+            }
+        }       
+     
+        if(posible){            
+            GraficarRestricciones();
+        }else{
+            return 0;
         }
-
-        partes[i] = partes[i].trim().replace("max = ", "").replace("min = ", "").replace("- ", "-").replace(" + ", " ");
-    
-        partes[i] = partes[i].split(" ");
-        console.log("Parte "+(i+1)+" : "+partes[i]+"\t|\t"+partes[i].length);    
-    
-        let equivalencia;
-        let resultado;
-    
-        if (i == 0 && partes[i].length == 2 && ( !(Math.sign(partes[i][0]) < 0 && Math.sign(partes[i][1]) < 0) ) ){ //Funcion objetivo
-            restricciones.push([partes[i][0], partes[i][0]]);
-            X1_FunObj = parseFloat(partes[i][0]);
-            X2_FunObj = parseFloat(partes[i][1]);
-    
-        }else if(i != 0 && partes[i].length == 3 && partes[i][0].includes("x1")){ //Restricciones solo con 1 termino
-            let coeficienteX1 = parseFloat(partes[i][0]);
-            let equivalencia = partes[i][1];
-            let resultado = parseFloat(partes[i][2]);
-            restricciones.push([coeficienteX1]);
-            equivalenciasRestricciones.push(equivalencia);
-            resultadoRestricciones.push(resultado);
-
-            //SANTI
-            CoefX1.push(coeficienteX1)
-            CoefX2.push(0);
-            vector_inecuacion.push(equivalencia)
-            CostoT.push(parseFloat(partes[i][2]));
-    
-        } else if(i != 0 && partes[i].length == 3 && partes[i][0].includes("x2")){ //Restricciones solo con 1 termino
-            let coeficienteX2 = parseFloat(partes[i][0]);
-            let equivalencia = partes[i][1];
-            let resultado = parseFloat(partes[i][2]);
-            restricciones.push([coeficienteX2]);
-            equivalenciasRestricciones.push(equivalencia);
-            resultadoRestricciones.push(resultado);
-
-            //SANTI
-            CoefX1.push(0);
-            CoefX2.push(coeficienteX2);
-            vector_inecuacion.push(equivalencia)
-            CostoT.push(parseFloat(partes[i][2]));
-    
-        } else if (i != 0 && partes[i].length == 4) { //Restricciones solo con 2 terminos
-            let coeficienteX1 = parseFloat(partes[i][0]);
-            let coeficienteX2 = parseFloat(partes[i][1]);
-            let equivalencia = partes[i][2];
-            let resultado = parseFloat(partes[i][3]);
-            restricciones.push([coeficienteX1, coeficienteX2]);
-            equivalenciasRestricciones.push(equivalencia);
-            resultadoRestricciones.push(resultado);
-
-            //SANTI
-            CoefX1.push(coeficienteX1);
-            CoefX2.push(coeficienteX2);
-            vector_inecuacion.push(equivalencia)
-            CostoT.push(resultado);
-    
-        } else { //Si tienen menos de 1 termino o mas de 2, esta mal formulado
-            console.log("Vos sos re estupido, mira bien las restriccion "+(i+1));
-        }
-    }
-    
-    // console.log("Restricciones: ", restricciones);
-    // console.log("Equivalencias: ", equivalenciasRestricciones);
-    // console.log("Resultados: ", resultadoRestricciones);
-    console.log("\n\nFuncion objetivo: ", X1_FunObj, typeof(X1_FunObj), " | ", X2_FunObj, typeof(X1_FunObj));
-    console.log("Coeficienes X1: "+CoefX1+" "+typeof(CoefX1)+" "+typeof(CoefX1[0])+" | Coeficienes X2: "+CoefX2+" "+typeof(CoefX2)+" "+typeof(CoefX2[0]));
-    console.log("Equivalencias: "+vector_inecuacion);
-    console.log("Resultados: "+CostoT);
-    console.log(typeof(CostoT[1]));
-    GraficarRestricciones();
 }
 
 function calcularIntersecciones() { //CHECK
