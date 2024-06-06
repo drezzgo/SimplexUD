@@ -49,7 +49,7 @@ const findTerms = (row) => {
             rowTerm.push(term);
         }
     });
-    alert(`Términos procesados: ${rowTerm}`);
+//    alert(`Términos procesados: ${rowTerm}`);
     return rowTerm;
 }
 
@@ -195,6 +195,10 @@ const removeBNegative = (bIndex, cDict, rVector) => {
 // Función para asignar coeficientes cero a las variables faltantes en las restricciones
 const assignZeroCoeff = (cDict) => {
     cDict.forEach((row, i) => {
+        // Contar el número de variables de restricción en esta fila
+        const numVariables = Object.keys(row).length;
+        console.log(`Número de variables de restricción en la fila ${i + 1}: ${numVariables}`);
+
         // Itera sobre las variables y si no están presentes en la restricción, asigna coeficiente cero
         $.variables.forEach(v => {
             if (!(v in row)) cDict[i][v] = 0;
@@ -302,18 +306,27 @@ const getBFS = () => {
 }
 
 const dotP = (v1, v2) => {
-    if (v1.length !== v2.length) return false;
-    // Realiza el producto punto entre dos vectores
+
+    if (v1.length !== v2.length) {
+        console.error("Los vectores no tienen la misma longitud.");
+        return false;
+    }
     let s = 0;
     v1.forEach((q, i) => s += q * v2[i]);
+    console.log(`Resultado del producto punto: ${s}`);
     return s;
+
 }
 
 const vDivide = (v1, v2) => {
     if (v1.length !== v2.length) return false;
     // Divide cada elemento del primer vector por el correspondiente del segundo vector
     let arr = [];
-    v1.forEach((q, i) => arr.push(q / v2[i]));
+    v1.forEach((q, i) => {
+        const result = q / v2[i];
+        arr.push(result);
+    //    alert(`Resultado de la división en posición ${i}: ${result}`);
+    });
     return arr;
 }
 
@@ -321,23 +334,31 @@ const vSubtract = (v1, v2) => {
     if (v1.length !== v2.length) return false;
     // Resta cada elemento del segundo vector del correspondiente del primer vector
     let arr = [];
-    v1.forEach((q, i) => arr.push(q - v2[i]));
+    v1.forEach((q, i) => {
+        const result = q - v2[i];
+        arr.push(result);
+     //   alert(`Resultado de la resta en posición ${i}: ${result}`);
+    });
     return arr;
 }
 
 // Función para calcular cjBar (costo reducido) de una variable
 const getCJBar = (col, cVector, basis) => {
+    console.log(`cVector: ${cVector}`);
+
     let p = [];
     // Construye el vector 'p' utilizando los elementos de la columna 'col' de la matriz A
     for (let i = 0; i < $.dim[0]; i++) {
         p.push($.matrixA[i][col]);
     }
+    console.log(`Vector p: ${p}`);
     // Calcula cjBar_j = cj_j - (p * basis)
     return cVector[col] - dotP(p, basis);
 }
 
 // Función para encontrar el costo reducido de todas las variables
 const findRCost = (cVector) => {
+    console.log("Longitud del vector cVector:", cVector.length);
     let cjBar = [];
     // Itera sobre todas las variables para calcular su costo reducido
     for (let j = 0; j < $.dim[1]; j++) {
@@ -368,12 +389,13 @@ const findLeavingVar = (col) => {
     }
     // Calcula las razones y filtra las negativas e infinitas
     $.ratio = vDivide($.rVector, p);
-    const filteredRatio = $.ratio.filter(q => q >= 0 && q !== Infinity);
+    const filteredRatio = $.ratio.filter(q => q >0 && q !== Infinity);
     // Si no hay razones válidas, la solución es no acotada
     if (filteredRatio.length === 0) {
         $.unbounded = true;
         return -1;
     }
+    console.log("Radios filtrados: " + filteredRatio.join(", "));
     // Encuentra la mínima razón y devuelve su índice
     const minRatio = Math.min(...filteredRatio);
     const index = $.ratio.indexOf(minRatio);
@@ -477,7 +499,6 @@ const checkDecimals = (n) => {
 
     // Si tiene más de 5 decimales, redondea el número a 5 decimales
     if (decimals !== -1) return Number(n.toFixed(5));
-
     // Si no tiene más de 5 decimales, retorna el número original
     return Number(n);
 }
