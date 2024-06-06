@@ -560,7 +560,7 @@ const removeArtificial = () => {
     });
 
     // Imprime una advertencia indicando que todas las variables artificiales han sido eliminadas
-    printWarning('Todas las variables artificiales se eliminan de la base (Ri).', output);
+    printWarning('Todas las variables artificiales (Ri) se eliminan de la Tabla base.', output);
 }
 
 // Fase 1 del algoritmo simplex: eliminar variables artificiales
