@@ -484,17 +484,17 @@ const printRatio = (card) => {
 
 const printEnteringLeavingVar = (card) => {
     const rows = card.querySelectorAll('tbody tr')
-    rows[$.leavingIndex].classList.add('has-background-grey-lighter')
+    rows[$.leavingIndex].classList.add('has-background-danger-light')
     rows.forEach((row, i) => {
         const td = row.querySelectorAll('td')[$.minmaxRCostIndex]
         if (i === $.leavingIndex) {
-            td.classList.add('has-background-grey-light')
+            td.classList.add('has-background-danger-light')
             return
         }
-        td.classList.add('has-background-grey-lighter')
+        td.classList.add('has-background-danger-light')
     })
     const thRCost = card.querySelectorAll('tfoot tr th')[$.minmaxRCostIndex + 1]
-    thRCost.classList.add('has-background-grey-lighter')
+    thRCost.classList.add('has-background-danger-light')
 
     const word = $.target === 'min' ? 'el mas bajo' : 'el mas alto'
     const ev1 = `Variable de entrada :Entre todos los costos relativos  (Cj-Zj)`
