@@ -289,9 +289,9 @@ const printTableCardStandardForm = (txt) => {
 }
 
 const printVariables = (q) => {
-    const vars = q === 'Basic' ? $.variables : $.variables.slice($.basicKount)
+    const vars = q === 'Variables' ? $.variables : $.variables.slice($.basicKount)
     const txt = vars.join(', ')
-    const div = createNode('div', ['block'], `${q} variables: ${txt}`)
+    const div = createNode('div', ['block'], `${q} Basicas: ${txt}`)
     output.appendChild(div)
 }
 
@@ -325,7 +325,7 @@ const printTableBFS = () => {
 const printBFS = () => {
     const div = createNode('div', ['message'])
     const header = createNode('div', ['message-header'])
-    const p = createNode('p', [], 'Solución básica factible actual (BFS)')
+    const p = createNode('p', [], 'Solución básica factible actual (SBF)')
     header.appendChild(p)
     div.appendChild(header)
 
@@ -392,9 +392,9 @@ const printTableHead = (phase) => {
     const thead = createNode('thead')
     const cBasis = createNode('th', [], 'Base\nActual')
     cBasis.setAttribute('rowspan', 2)
-    const cBasicVars = createNode('th', [], 'variables\nbasicas')
+    const cBasicVars = createNode('th', [], 'Variable\nbasica')
     cBasicVars.setAttribute('rowspan', 2)
-    const b = createNode('th', [], 'b')
+    const b = createNode('th', [], 'Xb')
     b.setAttribute('rowspan', 2)
 
     const p1CVRow = phase == 1 ? printHeaderNumRowCol($.p1CostVector) : printHeaderNumRowCol($.costVector)
@@ -469,14 +469,14 @@ const printTableCard = (phase) => {
 
 const printRatio = (card) => {
     const trHead = card.querySelector('thead tr')
-    const th = createNode('th', [], 'ratio')
+    const th = createNode('th', [], 'Proporciones')
     th.setAttribute('rowspan', 2)
     trHead.appendChild(th)
 
     const trBody = card.querySelectorAll('tbody tr')
     trBody.forEach((tr, i) => {
         const r = $.ratio[i]
-        const txt = isFinite(r) ? `${checkDecimals(r)}` : 'infinity'
+        const txt = isFinite(r) ? `${checkDecimals(r)}` : 'infinito'
         const th = createNode('th', ['has-background-white-ter'], txt)
         tr.appendChild(th)
     })
@@ -496,15 +496,15 @@ const printEnteringLeavingVar = (card) => {
     const thRCost = card.querySelectorAll('tfoot tr th')[$.minmaxRCostIndex + 1]
     thRCost.classList.add('has-background-grey-lighter')
 
-    const word = $.target === 'min' ? 'más pequeño' : 'más grande'
+    const word = $.target === 'min' ? 'el mas bajo' : 'el mas alto'
     const ev1 = `Variable de entrada :Entre todos los costos relativos  (Cj-Zj)`
-    const ev2 = `${checkDecimals($.minmaxRCost)} is ${word}`
-    const ev3 = `por lo tanto  ${$.variables[$.minmaxRCostIndex]} es la variable de entrada`
+    const ev2 = `${checkDecimals($.minmaxRCost)} es ${word}`
+    const ev3 = `Entonces  ${$.variables[$.minmaxRCostIndex]} es la variable entrante`
     const ev = `${ev1}, ${ev2}. ${ev3}.`
 
-    const lv1 = `Variable de Salida: Entre todas las razones (Radio)`
+    const lv1 = `Variable de Salida: Entre todas las proporciones`
     const lv2 = `${checkDecimals($.ratio[$.leavingIndex])} es la más baja `
-    const lv3 = `por lo tanto ${$.basicVars[$.leavingIndex]} es la variable de salida`
+    const lv3 = `Entonces ${$.basicVars[$.leavingIndex]} es la variable saliente`
     const lv = `${lv1}, ${lv2}. ${lv3}.`
 
     const block = printEnteringLeavingTxt(ev, lv)
@@ -527,7 +527,7 @@ const printAnswer = () => {
     soln.appendChild(z)
     body.appendChild(soln)
 
-    const iter = createNode('div', ['block'], `Número de iteraciones: ${$.kount}`)
+    const iter = createNode('div', ['block'], `Iteraciones realizadas: ${$.kount}`)
     body.appendChild(iter)
     div.appendChild(body)
     output.appendChild(div)
