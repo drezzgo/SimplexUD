@@ -523,7 +523,7 @@ const printAnswer = () => {
     body.appendChild(table)
 
     const soln = createNode('div', ['block'])
-    const z = createNode('strong', [], `Z = ${checkDecimals($.objZ)}`)
+    const z = createNode('strong', [], `Z = ${decimalToFraction($.objZ)}`)
     soln.appendChild(z)
     body.appendChild(soln)
 
